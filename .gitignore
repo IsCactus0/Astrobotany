@@ -363,3 +363,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/AstrobotanyGame/Content/Fonts
+/AstrobotanyGame/Content/Content.mgcb
+/AstrobotanyGame/Content/Content.mgcb
