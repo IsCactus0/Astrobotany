@@ -1,33 +1,46 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AstrobotanyLibrary.Classes.Enums;
+using AstrobotanyLibrary.Classes.Utility;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel.Design;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
-    public class AssetManager : GameComponent
+    public class AssetManager
     {
         public AssetManager(Game game)
-            : base(game)
         {
             AssetPath = @$"../../../Assets/";
             Content = game.Content;
-            Device = game.GraphicsDevice;
+            Graphics = game.GraphicsDevice;
             Textures = new Dictionary<string, Texture2D>();
-            Fonts = new Dictionary<string, SpriteFont>();
+            Fonts = new Dictionary<string, FontFamily>();
+
+            LoadContent();
         }
 
         public string AssetPath { get; private set; }
         private ContentManager Content { get; set; }
-        private GraphicsDevice Device { get; set; }
+        private GraphicsDevice Graphics { get; set; }
         public Dictionary<string, Texture2D> Textures { get; private set; }
-        public Dictionary<string, SpriteFont> Fonts { get; private set; }
+        public Dictionary<string, FontFamily> Fonts { get; private set; }
 
-        public bool LoadTexture(string file)
+        public void LoadContent()
+        {
+            Textures.Add("empty", Drawing.Square(Graphics, 1, Color.Magenta));
+            Textures.Add("simple", Drawing.Square(Graphics, 1, Color.White));
+            Textures.Add("circle", Drawing.Circle(Graphics, 8, Color.White));
+            Textures.Add("blur", Drawing.Circle(Graphics, 3, Color.White, FadeType.InverseSquare));
+            LoadFontFamily("MonomaniacOne");
+            LoadFontFamily("Montserrat");
+        }
+        public bool LoadTexture(string name)
         {
             try
             {
-                FileStream stream = File.OpenRead($@"{AssetPath}/Textures/{file}.png");
-                Texture2D texture = Texture2D.FromStream(Device, stream);
+                FileStream stream = File.OpenRead($@"{AssetPath}/Textures/{name}.png");
+                Texture2D texture = Texture2D.FromStream(Graphics, stream);
                 stream.Close();
 
                 Color[] buffer = new Color[texture.Width * texture.Height];
@@ -36,22 +49,82 @@ namespace AstrobotanyLibrary.Classes.Managers
                     buffer[i] = Color.FromNonPremultiplied(buffer[i].R, buffer[i].G, buffer[i].B, buffer[i].A);
                 texture.SetData(buffer);
 
-                Textures.Add(file, texture);
+                if (Fonts.ContainsKey(name))
+                    Fonts.Remove(name);
+
+                Textures.Add(name, texture);
             }
-            catch (FileNotFoundException e)
+            catch (Exception exception)
             {
-                Console.WriteLine($"Loading texture ({file}) failed:\n{e.Message}");
+                Console.WriteLine($"Loading texture ({name}) failed:\n{exception.Message}");
                 return false;
             }
 
             return true;
         }
-        public Texture2D GetTexture(string file)
+        public Texture2D GetTexture(string name)
         {
-            if (!Textures.ContainsKey(file))
-                LoadTexture(file);
+            if (!Textures.ContainsKey(name))
+                LoadTexture(name);
 
-            return Textures[file];
+            return Textures[name];
+        }
+        public bool LoadFont(string name, FontWeight weight = FontWeight.Regular)
+        {
+            try
+            {
+                SpriteFont font = Content.Load<SpriteFont>($@"Fonts/{name}-{weight}");
+                if (!Fonts.ContainsKey(name))
+                    Fonts.Add(name, new FontFamily());
+                Fonts[name].Fonts.Add(weight, font);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"{exception.GetType().Name} while loading font ({name}-{weight}).\n{exception.Message}");
+                return false;
+            }
+        }
+        public SpriteFont GetFont(string name, FontWeight weight = FontWeight.Regular)
+        {
+            if (!Fonts.ContainsKey(name))
+                LoadFont(name, weight);
+                    
+            return Fonts[name].GetFont(weight);
+        }
+        public bool LoadFontFamily(string name)
+        {
+            FontFamily fontFamily = new FontFamily();
+
+            foreach (FontWeight weight in Enum.GetValues(typeof(FontWeight)))
+            {
+                try
+                {
+                    fontFamily.Fonts.Add(weight, Content.Load<SpriteFont>($@"Fonts/{name}-{weight}"));
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"{exception.GetType().Name} while loading font ({name}-{weight}) of ({name} family).\n{exception.Message}");
+                    continue;
+                }
+            }
+
+            if (fontFamily.Fonts.Values.Count > 0)
+            {
+                if (Fonts.ContainsKey(name))
+                    Fonts.Remove(name);
+                Fonts.Add(name, fontFamily);
+                return true;
+            }
+            
+            return false;
+        }
+        public FontFamily GetFontFamily(string name)
+        {
+            if (!Fonts.ContainsKey(name))
+                LoadFontFamily(name);
+
+            return Fonts[name];
         }
     }
 }

@@ -224,9 +224,17 @@ namespace AstrobotanyLibrary.Classes.Managers
         {
             return Vector2.Transform(MouseState.Position.ToVector2(), camera.InvertedTransform);
         }
+        public Point MouseWorldPositionP(Camera camera)
+        {
+            return MouseWorldPosition(camera).ToPoint();
+        }
         public Vector2 MouseScreenPosition()
         {
-            return MouseState.Position.ToVector2();
+            return MouseScreenPositionP().ToVector2();
+        }
+        public Point MouseScreenPositionP()
+        {
+            return MouseState.Position;
         }
         public Rectangle SelectionBounds()
         {
