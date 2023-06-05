@@ -7,7 +7,7 @@
         Fruit = 0xDA36B1,
         Component = 0x36DAC1,
         Valuable = 0x86D168,
-        Note = 0xFF0000,
-        Misc = 0xEDD04A,
+        Note = 0xE9E3C7,
+        Misc = 0xEBB765,
     }
 }

@@ -3,7 +3,6 @@ using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System.ComponentModel.Design;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
@@ -11,7 +10,7 @@ namespace AstrobotanyLibrary.Classes.Managers
     {
         public AssetManager(Game game)
         {
-            AssetPath = @$"../../../Assets/";
+            AssetPath = @$"../../../../Assets/";
             Content = game.Content;
             Graphics = game.GraphicsDevice;
             Textures = new Dictionary<string, Texture2D>();
@@ -19,10 +18,10 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             LoadContent();
         }
-
-        public string AssetPath { get; private set; }
+        
         private ContentManager Content { get; set; }
         private GraphicsDevice Graphics { get; set; }
+        public string AssetPath { get; private set; }
         public Dictionary<string, Texture2D> Textures { get; private set; }
         public Dictionary<string, FontFamily> Fonts { get; private set; }
 
@@ -34,6 +33,15 @@ namespace AstrobotanyLibrary.Classes.Managers
             Textures.Add("blur", Drawing.Circle(Graphics, 3, Color.White, FadeType.InverseSquare));
             LoadFontFamily("MonomaniacOne");
             LoadFontFamily("Montserrat");
+        }
+        public void UnloadContent()
+        {
+            List<string> textures = Textures.Keys.ToList();
+            foreach (string texture in textures)
+            {
+                Textures[texture].Dispose();
+                Textures.Remove(texture);
+            }
         }
         public bool LoadTexture(string name)
         {

@@ -1,86 +1,96 @@
-﻿using AstrobotanyLibrary.Classes.Enums;
-using AstrobotanyLibrary.Classes.Managers;
-using AstrobotanyLibrary.Classes.Utility;
+﻿using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Objects
 {
-    public class Window
+    public abstract class Window
     {
-        public Window()
+        protected Window()
         {
             Title = "";
             BackgroundColour = new Color(46, 39, 48);
-            Size = new Vector2(128);
             Position = Vector2.Zero;
+            Visible = true;
+            ZIndex = 0;
         }
-        public Window(string title, Color backgroundColour)
+        protected Window(string title)
+        {
+            Title = title;
+            BackgroundColour = new Color(46, 39, 48);
+            Position = Vector2.Zero;
+            Visible = true;
+            ZIndex = 0;
+        }
+        protected Window(string title, Color backgroundColour)
         {
             Title = title;
             BackgroundColour = backgroundColour;
-            Size = new Vector2(128);
             Position = Vector2.Zero;
+            Visible = true;
+            ZIndex = 0;
         }
-        public Window(string title, Color backgroundColour, Vector2 size)
+        protected Window(string title, Color backgroundColour, Vector2 position)
         {
             Title = title;
             BackgroundColour = backgroundColour;
-            Size = size;
-            Position = Vector2.Zero;
-        }
-        public Window(string title, Color backgroundColour, Vector2 size, Vector2 position)
-        {
-            Title = title;
-            BackgroundColour = backgroundColour;
-            Size = size;
             Position = position;
+            Visible = true;
+            ZIndex = 0;
         }
 
         public string Title { get; set; }
         public Color BackgroundColour { get; set; }
-        public Vector2 Size { get; set; }
         public Vector2 Position { get; set; }
-        public Rectangle Rectangle 
+        public Vector2 Size
         {
             get
             {
-                return new Rectangle(
-                    MathAdditions.ToPointFloor(Position),
-                    MathAdditions.ToPointCeiling(Size));
+                Rectangle rect = Rectangle;
+                return new Vector2(
+                    Math.Max(rect.Width, Main.AssetManager.GetFont("MonomaniacOne").MeasureString(Title.ToUpper()).X * 0.5f + 24),
+                    Math.Max(rect.Height, 58));
             }
         }
-
-        private Vector2 grabStart;
-
-        public virtual void Update(float delta)
+        public Rectangle Rectangle
         {
-            Vector2 mousePos = Main.InputManager.MouseScreenPosition();
-
-            if (!MathAdditions.PointIntersects(
-                mousePos.ToPoint(), Rectangle))
-                return;
-
-            if (Main.InputManager.MouseFirstPressed())
-                grabStart = mousePos;
+            get { return CalculateSize(); }
         }
+        public bool Visible { get; set; }
+        public int ZIndex { get; set; }
+
+        public abstract void Update(float delta);
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(
-                Main.AssetManager.GetTexture("simple"),
+            Drawing.DrawRectangle(
+                spriteBatch,
                 Rectangle,
                 BackgroundColour);
 
-            // spriteBatch.DrawString(
-            //     Main.AssetManager.GetFont("MonomaniacOne", FontWeight.Regular),
-            //     Title,
-            //     Position + new Vector2(16f, -11f), Color.White);
-            // 
-            // Drawing.DrawRoundedLine(
-            //     spriteBatch,
-            //     new Vector2(Position.X + 5, Position.Y),
-            //     new Vector2(Position.X - 5 + Size.X, Position.Y),
-            //     8f, Color.White);
+            spriteBatch.DrawString(
+                Main.AssetManager.GetFont("MonomaniacOne"),
+                Title.ToUpper(),
+                Position,
+                Color.White,
+                0f,
+                new Vector2(-32f, 0f),
+                0.5f,
+                SpriteEffects.None,
+                0f);
+
+            Drawing.DrawRoundedLine(
+                spriteBatch,
+                new Vector2(Position.X + 4f, Position.Y),
+                new Vector2(Position.X + Size.X - 4f, Position.Y),
+                8f, Color.White);
+        }
+        public virtual Rectangle CalculateSize()
+        {
+            return new Rectangle(Position.ToPoint(), Size.ToPoint());
+        }
+        public virtual void ToggleVisibility()
+        {
+            Visible = !Visible;
         }
     }
 }

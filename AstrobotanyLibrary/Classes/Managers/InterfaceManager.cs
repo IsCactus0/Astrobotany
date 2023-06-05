@@ -10,22 +10,35 @@ namespace AstrobotanyLibrary.Classes.Managers
                     : base(game)
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            Windows = new List<Window>
-            {
-                new Window("Inventory", new Color(32, 26, 34), new Vector2(429, 490), new Vector2(128))
-            };
+            Windows = new List<Window>();
+            Inventory = new ContainerWindow("Inventory", new Color(32, 26, 34), new Vector2(500), 4, 7);
+            Windows.Add(Inventory);
             CursorSize = 8f;
         }
 
         public static SpriteBatch SpriteBatch { get; private set; }
         public List<Window> Windows { get; private set; }
+        public Window Inventory { get; private set; }
+        public int SelectedIndex { get; set; }
         public float CursorSize { get; set; }
 
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
-            if (Windows is not null)
-                foreach (Window window in Windows)
+
+            Main.Camera.Scale -= delta * Main.InputManager.MouseScrollValue() * 10f;
+            Main.Camera.Scale = Math.Clamp(Main.Camera.Scale, 1f, 10f);
+
+            if (SelectedIndex >= 0 && SelectedIndex < Windows.Count - 1)
+            {
+                Window window = Windows[SelectedIndex];
+                Windows.Remove(window);
+                Windows.Add(window);
+                SelectedIndex = Windows.Count - 1;
+            }
+
+            foreach (Window window in Windows)
+                if (window.Visible)
                     window.Update(delta);
 
             base.Update(gameTime);
@@ -35,7 +48,8 @@ namespace AstrobotanyLibrary.Classes.Managers
             SpriteBatch.Begin();
 
             foreach (Window window in Windows)
-                window.Draw(SpriteBatch);
+                if (window.Visible)
+                    window.Draw(SpriteBatch);
 
             SpriteBatch.Draw(
                 Main.AssetManager.GetTexture("circle"),

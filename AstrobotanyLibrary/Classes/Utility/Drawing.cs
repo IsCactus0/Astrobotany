@@ -106,6 +106,13 @@ namespace AstrobotanyLibrary.Classes.Utility
             return rectangle;
         }
 
+        public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, Color colour)
+        {
+            spriteBatch.Draw(
+                Main.AssetManager.GetTexture("simple"),
+                rectangle,
+                colour);
+        }
         public static void DrawLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, float thickness, Color colour)
         {
             float distance = Vector2.Distance(start, end);

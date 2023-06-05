@@ -2,7 +2,6 @@
 {
     public enum Action
     {
-        // Player
         MoveUp,
         MoveDown,
         MoveLeft,
@@ -10,7 +9,7 @@
         Sprint,
         Interact,
         Inventory,
-        // Menu
+
         Exit,
         MenuUp,
         MenuDown,
@@ -18,7 +17,7 @@
         MenuRight,
         MenuEnter,
         MenuBack,
-        // Other
+
         ZoomIn,
         ZoomOut,
     }

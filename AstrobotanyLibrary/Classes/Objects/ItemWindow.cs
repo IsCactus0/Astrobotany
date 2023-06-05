@@ -14,19 +14,18 @@ namespace AstrobotanyLibrary.Classes.Objects
         {
             Item = item;
         }
-        public ItemWindow(Item item, Color backgroundColour, Vector2 size)
-            : base(item.Name, backgroundColour, size)
-        {
-            Item = item;
-        }
-        public ItemWindow(Item item, Color backgroundColour, Vector2 size, Vector2 position)
-            : base(item.Name, backgroundColour, size, position)
+        public ItemWindow(Item item, Color backgroundColour, Vector2 position)
+            : base(item.Name, backgroundColour, position)
         {
             Item = item;
         }
 
         public Item Item { get; private set; }
 
+        public override void Update(float delta)
+        {
+
+        }
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);

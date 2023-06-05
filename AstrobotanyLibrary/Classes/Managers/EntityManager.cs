@@ -5,35 +5,27 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
-    public class ParticleManager : DrawableGameComponent
+    public class EntityManager : DrawableGameComponent
     {
-        public ParticleManager(Game game)
+        public EntityManager(Game game)
             : base(game)
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            Particles = new List<Particle>();
-            MaxParticles = 1000;
+            Entities = new List<Entity>();
+            Player = new Player();
         }
 
         public SpriteBatch SpriteBatch { get; private set; }
-        public List<Particle> Particles { get; private set; }
-        public int MaxParticles { get; set; }
+        public List<Entity> Entities { get; private set; }
+        public Player Player { get; private set; }
 
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
-            if (Particles.Count > MaxParticles)
-                Particles.RemoveRange(0, Particles.Count - MaxParticles);
 
-            for (int i = Particles.Count - 1; i >= 0; i--)
-            {
-                if (!MathAdditions.VectorIntersects(Particles[i].Position, Main.Camera.BoundingBox)) {
-                    Particles[i].Destroy();
-                    continue;
-                }
-
-                Particles[i].Update(delta);
-            }
+            Player.Update(delta);
+            for (int i = Entities.Count - 1; i >= 0; i--)
+                Entities[i].Update(delta);
 
             base.Update(gameTime);
         }
@@ -47,9 +39,10 @@ namespace AstrobotanyLibrary.Classes.Managers
                 RasterizerState.CullNone,
                 null, Main.Camera.Transform);
 
-            foreach (Particle particle in Particles)
-                if (MathAdditions.VectorIntersects(particle.Position, Main.Camera.BoundingBox))
-                    particle.Draw(SpriteBatch);
+            Player.Draw(SpriteBatch);
+            foreach (Entity entity in Entities)
+                if (MathAdditions.VectorIntersects(entity.Position, Main.Camera.BoundingBox))
+                    entity.Draw(SpriteBatch);
 
             base.Draw(gameTime);
 

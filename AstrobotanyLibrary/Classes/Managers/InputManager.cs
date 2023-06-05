@@ -2,9 +2,11 @@
 using AstrobotanyLibrary.Classes.Objects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System.Runtime.Serialization;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
+    [DataContract]
     public class InputManager : GameComponent
     {
         public InputManager(Game game): base(game)
@@ -16,6 +18,7 @@ namespace AstrobotanyLibrary.Classes.Managers
                 { Enums.Action.MoveLeft, new List<Keys>()   { Keys.Left, Keys.A } },
                 { Enums.Action.MoveRight, new List<Keys>()  { Keys.Right, Keys.D } },
                 { Enums.Action.Interact, new List<Keys>()   { Keys.F } },
+                { Enums.Action.Inventory, new List<Keys>()   { Keys.I } },
                 { Enums.Action.Sprint, new List<Keys>()     { Keys.LeftShift } },
 
                 { Enums.Action.Exit, new List<Keys>()       { Keys.Escape } },
@@ -36,16 +39,26 @@ namespace AstrobotanyLibrary.Classes.Managers
                 { Enums.Action.MoveLeft, new List<Buttons>()    { Buttons.LeftThumbstickLeft } },
                 { Enums.Action.MoveRight, new List<Buttons>()   { Buttons.LeftThumbstickRight } },
                 { Enums.Action.Interact, new List<Buttons>()    { Buttons.A } },
+                { Enums.Action.Inventory, new List<Buttons>()    { Buttons.Start } },
                 { Enums.Action.Sprint, new List<Buttons>()      { Buttons.LeftStick } },
 
-                { Enums.Action.Exit, new List<Buttons>()        { Buttons.Start } },
-                { Enums.Action.ZoomIn, new List<Buttons>()      { Buttons.DPadUp } },
-                { Enums.Action.ZoomOut, new List<Buttons>()     { Buttons.DPadDown } }
+                { Enums.Action.Exit, new List<Buttons>()        { Buttons.BigButton } },
+                { Enums.Action.MenuUp, new List<Buttons>()      { Buttons.DPadUp, Buttons.LeftThumbstickUp } },
+                { Enums.Action.MenuDown, new List<Buttons>()    { Buttons.DPadDown, Buttons.LeftThumbstickDown } },
+                { Enums.Action.MenuLeft, new List<Buttons>()    { Buttons.DPadLeft, Buttons.LeftThumbstickLeft } },
+                { Enums.Action.MenuRight, new List<Buttons>()   { Buttons.DPadRight, Buttons.LeftThumbstickRight } },
+                { Enums.Action.MenuEnter, new List<Buttons>()   { Buttons.A } },
+                { Enums.Action.MenuBack, new List<Buttons>()    { Buttons.B } },
+
+                { Enums.Action.ZoomIn, new List<Buttons>()      { Buttons.RightThumbstickUp } },
+                { Enums.Action.ZoomOut, new List<Buttons>()     { Buttons.RightThumbstickDown } }
             };
         }
 
-        private Dictionary<Enums.Action, List<Keys>> KeyboardControls { get; set; }
-        private Dictionary<Enums.Action, List<Buttons>> GamePadControls { get; set; }
+        [DataMember]
+        public Dictionary<Enums.Action, List<Keys>> KeyboardControls { get; set; }
+        [DataMember]
+        public Dictionary<Enums.Action, List<Buttons>> GamePadControls { get; set; }
         public KeyboardState KeyboardState { get; private set; }
         public KeyboardState LastKeyboardState { get; private set; }
         public MouseState MouseState { get; private set; }
@@ -57,12 +70,23 @@ namespace AstrobotanyLibrary.Classes.Managers
 
         public override void Update(GameTime gameTime)
         {
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
+
             LastKeyboardState = KeyboardState;
             KeyboardState = Keyboard.GetState();
             LastMouseState = MouseState;
             MouseState = Mouse.GetState();
             LastGamePadState = GamePadState;
             GamePadState = GamePad.GetState(PlayerIndex.One);
+
+            if (InputPressed(Enums.Action.Exit))
+                Main.Quit(Main.Self, true);
+            if (InputFirstPressed(Enums.Action.Inventory))
+                Main.InterfaceManager.Inventory.ToggleVisibility();
+            if (InputPressed(Enums.Action.ZoomIn))
+                Main.Camera.Scale += delta;
+            if (InputPressed(Enums.Action.ZoomOut))
+                Main.Camera.Scale -= delta;
 
             base.Update(gameTime);
         }
@@ -120,6 +144,10 @@ namespace AstrobotanyLibrary.Classes.Managers
                     return LastMouseState.MiddleButton == ButtonState.Pressed &&
                         MouseState.MiddleButton == ButtonState.Released;
             }
+        }
+        public float MouseScrollValue()
+        {
+            return LastMouseState.ScrollWheelValue - MouseState.ScrollWheelValue;
         }
 
         public bool KeyPressed(Keys key)
