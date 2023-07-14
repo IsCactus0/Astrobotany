@@ -1,4 +1,4 @@
-﻿using AstrobotanyLibrary.Classes.Objects;
+﻿using AstrobotanyLibrary.Classes.Objects.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,13 +10,13 @@ namespace AstrobotanyLibrary.Classes.Managers
                     : base(game)
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            Windows = new List<Window>();
-            Inventory = new ContainerWindow("Inventory", new Color(32, 26, 34), new Vector2(500), 4, 7);
-            Windows.Add(Inventory);
+            Inventory = new ContainerWindow("Inventory", new Color(32, 26, 34), new Vector2(32), 4, 7);
+            Windows = new List<Window> { Inventory };
             CursorSize = 8f;
         }
 
         public static SpriteBatch SpriteBatch { get; private set; }
+        public Effect ActiveEffect { get; set; }
         public List<Window> Windows { get; private set; }
         public Window Inventory { get; private set; }
         public int SelectedIndex { get; set; }
@@ -28,6 +28,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             Main.Camera.Scale -= delta * Main.InputManager.MouseScrollValue() * 10f;
             Main.Camera.Scale = Math.Clamp(Main.Camera.Scale, 1f, 10f);
+            Main.Camera.Update(delta, 80f, Vector2.Zero);// Main.EntityManager.Player.Position);
 
             if (SelectedIndex >= 0 && SelectedIndex < Windows.Count - 1)
             {
@@ -45,7 +46,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         }
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin();
+            SpriteBatch.Begin(effect: ActiveEffect);
 
             foreach (Window window in Windows)
                 if (window.Visible)

@@ -1,5 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
-using AstrobotanyLibrary.Classes.Objects;
+using AstrobotanyLibrary.Classes.Objects.Items;
 using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework.Graphics;
 using System.Drawing.Drawing2D;

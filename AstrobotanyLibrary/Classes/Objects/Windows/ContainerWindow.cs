@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AstrobotanyLibrary.Classes.Objects
+namespace AstrobotanyLibrary.Classes.Objects.Windows
 {
     public class ContainerWindow : MovableWindow
     {
@@ -57,13 +57,13 @@ namespace AstrobotanyLibrary.Classes.Objects
                             (int)Position.X + 12 + x * 51,
                             (int)Position.Y + 70 + y * 51,
                             48, 48),
-                        new Color(26, 21, 28));
+                        new Color(26, 21, 28) * 0.8f);
 
                     if (Inventory.Items[x, y] is not null)
                         spriteBatch.Draw(
                             Main.AssetManager.GetTexture(Inventory.Items[x, y].Item.Name),
                             new Rectangle(x * 51, y * 51, 48, 48),
-                            Color.White);
+                            Color.White * 0.8f);
                 }
             }
         }

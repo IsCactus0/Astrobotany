@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Security.Principal;
 
-namespace AstrobotanyLibrary.Classes.Objects
+namespace AstrobotanyLibrary.Classes.Objects.Windows
 {
     public abstract class MovableWindow : Window
     {

@@ -1,4 +1,6 @@
-﻿namespace AstrobotanyLibrary.Classes.Objects
+﻿using AstrobotanyLibrary.Classes.Objects.Items;
+
+namespace AstrobotanyLibrary.Classes.Objects
 {
     public class ItemStack
     {

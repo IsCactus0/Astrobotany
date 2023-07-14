@@ -1,5 +1,4 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
-using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 
 namespace AstrobotanyLibrary.Classes.Objects
@@ -133,7 +132,7 @@ namespace AstrobotanyLibrary.Classes.Objects
         public float MaxAge { get; protected set; }
         public int GrowthStage
         {
-            get { return (int)Math.Floor(MathAdditions.Map(Age, 0, MaxAge, 0, GrowthStage)); }
+            get { return (int)Math.Clamp(((Age / MaxAge) * MaxGrowthStage), 0, MaxGrowthStage); }
         }
         public int MaxGrowthStage { get; protected set; }
         public float PreferredLightIntensity { get; protected set; }
@@ -152,8 +151,8 @@ namespace AstrobotanyLibrary.Classes.Objects
         }
         public virtual void Update(float delta, Substrate substrate)
         {
-            float growthRate = 1;
-            Age += delta * growthRate;
+            // float growthRate = 1;
+            Age += delta;
         }
     }
 }

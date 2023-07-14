@@ -3,6 +3,7 @@ using AstrobotanyLibrary.Classes.Objects;
 using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace AstrobotanyLibrary.Classes
 {
@@ -12,11 +13,12 @@ namespace AstrobotanyLibrary.Classes
         public static Settings Settings { get; set; }
         
         public static AssetManager AssetManager { get; private set; }
-        public static InterfaceManager InterfaceManager { get; private set; }
         public static InputManager InputManager { get; private set; }
-        public static PropManager PropManager { get; private set; }
+        public static TileManager TileManager { get; private set; }
+        public static DecorationManager DecorationManager { get; private set; }
         public static EntityManager EntityManager { get; private set; }
         public static ParticleManager ParticleManager { get; private set; }
+        public static InterfaceManager InterfaceManager { get; private set; }
 
         public static GraphicsDeviceManager Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
@@ -36,21 +38,24 @@ namespace AstrobotanyLibrary.Classes
         }
         protected override void Initialize()
         {
-            AssetManager = new AssetManager(this);
-            InterfaceManager = new InterfaceManager(this);
-            InputManager = new InputManager(this);
-            PropManager = new PropManager(this);
-            EntityManager = new EntityManager(this);
-            ParticleManager = new ParticleManager(this);
-
             OpenSimplexNoise = new OpenSimplexNoise();
             Random = new Random();
             Camera = new Camera();
 
-            Components.Add(InterfaceManager);
+            AssetManager = new AssetManager(this);
+            InputManager = new InputManager(this);
+            TileManager = new TileManager(this);
+            DecorationManager = new DecorationManager(this);
+            EntityManager = new EntityManager(this);
+            ParticleManager = new ParticleManager(this);
+            InterfaceManager = new InterfaceManager(this);
+
             Components.Add(InputManager);
-            Components.Add(PropManager);
+            Components.Add(TileManager);
+            Components.Add(DecorationManager);
+            Components.Add(EntityManager);
             Components.Add(ParticleManager);
+            Components.Add(InterfaceManager);
 
             Settings = new Settings();
             Settings.LoadSettings();
@@ -72,6 +77,17 @@ namespace AstrobotanyLibrary.Classes
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (InputManager.InputPressed(Enums.Action.MoveUp))
+                Camera.Offset -= Vector2.UnitY * delta * 100f;
+            else if (InputManager.InputPressed(Enums.Action.MoveDown))
+                Camera.Offset += Vector2.UnitY * delta * 100f;
+            if (InputManager.InputPressed(Enums.Action.MoveLeft))
+                Camera.Offset -= Vector2.UnitX * delta * 100f;
+            else if (InputManager.InputPressed(Enums.Action.MoveRight))
+                Camera.Offset += Vector2.UnitX * delta * 100f;
         }
         protected override void Draw(GameTime gameTime)
         {
@@ -88,11 +104,14 @@ namespace AstrobotanyLibrary.Classes
                 SamplerState.PointClamp,
                 DepthStencilState.None,
                 RasterizerState.CullNone,
-                null);
+                AssetManager.GetShader("Monochrome"));
             
             SpriteBatch.Draw(
                 RenderTarget,
-                new Rectangle(0, 0, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight),
+                new Rectangle(
+                    0, 0,
+                    Graphics.PreferredBackBufferWidth,
+                    Graphics.PreferredBackBufferHeight),
                 Color.White);
 
             SpriteBatch.End();

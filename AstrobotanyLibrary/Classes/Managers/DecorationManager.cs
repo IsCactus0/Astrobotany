@@ -1,35 +1,35 @@
 ﻿using AstrobotanyLibrary.Classes.Objects;
-using AstrobotanyLibrary.Classes.Objects.Entities;
+using AstrobotanyLibrary.Classes.Objects.Decorations;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
-    public class EntityManager : DrawableGameComponent
+    public class DecorationManager : DrawableGameComponent
     {
-        public EntityManager(Game game)
+        public DecorationManager(Game game)
             : base(game)
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            Entities = new List<Entity>();
+            Decorations = new List<Decoration>();
         }
 
-        public SpriteBatch SpriteBatch { get; private set; }
-        public List<Entity> Entities { get; set; }
+        public static SpriteBatch SpriteBatch { get; private set; }
+        public List<Decoration> Decorations { get; set; }
         public QuadTree QuadTree { get; private set; }
 
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
-            QuadTree = new QuadTree(Main.Camera.PhysicsBoundingBox, 8);
+            QuadTree = new QuadTree(Main.Camera.PhysicsBoundingBox, 4);
 
-            for (int i = Entities.Count - 1; i >= 0; i--)
+            for (int i = Decorations.Count - 1; i >= 0; i--)
             {
-                Entity entity = Entities[i];
-                if (Main.Camera.PhysicsBoundingBox.Intersects(entity.Hitbox))
+                Decoration decoration = Decorations[i];
+                if (Main.Camera.PhysicsBoundingBox.Intersects(decoration.Hitbox))
                 {
-                    entity.Update(delta);
-                    QuadTree.Add(entity);
+                    decoration.Update(delta);
+                    QuadTree.Add(decoration);
                 }
             }
 
@@ -45,9 +45,9 @@ namespace AstrobotanyLibrary.Classes.Managers
                 RasterizerState.CullNone,
                 null, Main.Camera.Transform);
 
-            foreach (Entity entity in Entities)
-                if (Main.Camera.BoundingBox.Intersects(entity.Sprite))
-                    entity.Draw(SpriteBatch);
+            foreach (Decoration decoration in Decorations)
+                if (Main.Camera.BoundingBox.Intersects(decoration.Sprite))
+                    decoration.Draw(SpriteBatch);
 
             base.Draw(gameTime);
 

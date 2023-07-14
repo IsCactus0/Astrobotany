@@ -10,7 +10,7 @@ namespace AstrobotanyLibrary.Classes.Objects
         {
             Scale = 1f;
             Rotation = 0f;
-            ViewDistance = 1000f;
+            PhysicsDistance = 1000f;
             Position = Vector2.Zero;
             Offset = Vector2.Zero;
             Viewport = new Viewport();
@@ -19,7 +19,7 @@ namespace AstrobotanyLibrary.Classes.Objects
 
         public float Scale { get; set; }
         public float Rotation { get; set; }
-        public float ViewDistance { get; set; }
+        public float PhysicsDistance { get; set; }
         public Matrix Transform
         {
             get
@@ -52,15 +52,15 @@ namespace AstrobotanyLibrary.Classes.Objects
                     (int)(Viewport.Height * (1f / Scale)));
             }
         }
-        public Rectangle RenderBoundingBox
+        public Rectangle PhysicsBoundingBox
         {
             get
             {
                 return new Rectangle(
-                    (int)((Position.X - (Viewport.Width / 2f) * (1f / Scale)) - ViewDistance),
-                    (int)((Position.Y - (Viewport.Height / 2f) * (1f / Scale)) - ViewDistance),
-                    (int)((Viewport.Width * (1f / Scale)) + ViewDistance * 2f),
-                    (int)((Viewport.Height * (1f / Scale)) + ViewDistance * 2f));
+                    (int)((Position.X - (Viewport.Width / 2f) * (1f / Scale)) - PhysicsDistance),
+                    (int)((Position.Y - (Viewport.Height / 2f) * (1f / Scale)) - PhysicsDistance),
+                    (int)((Viewport.Width * (1f / Scale)) + PhysicsDistance * 2f),
+                    (int)((Viewport.Height * (1f / Scale)) + PhysicsDistance * 2f));
             }
         }
 

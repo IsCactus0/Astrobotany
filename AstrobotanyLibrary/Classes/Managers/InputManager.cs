@@ -81,8 +81,6 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             if (InputPressed(Enums.Action.Exit))
                 Main.Quit(Main.Self, true);
-            if (InputFirstPressed(Enums.Action.Inventory))
-                Main.InterfaceManager.Inventory.ToggleVisibility();
             if (InputPressed(Enums.Action.ZoomIn))
                 Main.Camera.Scale += delta;
             if (InputPressed(Enums.Action.ZoomOut))

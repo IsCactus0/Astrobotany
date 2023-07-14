@@ -3,6 +3,7 @@ using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Text.RegularExpressions;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
@@ -14,6 +15,7 @@ namespace AstrobotanyLibrary.Classes.Managers
             Content = game.Content;
             Graphics = game.GraphicsDevice;
             Textures = new Dictionary<string, Texture2D>();
+            Shaders = new Dictionary<string, Effect>();
             Fonts = new Dictionary<string, FontFamily>();
 
             LoadContent();
@@ -23,14 +25,18 @@ namespace AstrobotanyLibrary.Classes.Managers
         private GraphicsDevice Graphics { get; set; }
         public string AssetPath { get; private set; }
         public Dictionary<string, Texture2D> Textures { get; private set; }
+        public Dictionary<string, Effect> Shaders { get; private set; }
         public Dictionary<string, FontFamily> Fonts { get; private set; }
 
         public void LoadContent()
         {
+            // Load all basic textures...
             Textures.Add("empty", Drawing.Square(Graphics, 1, Color.Magenta));
             Textures.Add("simple", Drawing.Square(Graphics, 1, Color.White));
             Textures.Add("circle", Drawing.Circle(Graphics, 8, Color.White));
             Textures.Add("blur", Drawing.Circle(Graphics, 3, Color.White, FadeType.InverseSquare));
+
+            // Load all fonts...
             LoadFontFamily("MonomaniacOne");
             LoadFontFamily("Montserrat");
         }
@@ -76,6 +82,32 @@ namespace AstrobotanyLibrary.Classes.Managers
                 LoadTexture(name);
 
             return Textures[name];
+        }
+        public bool LoadShader(string name)
+        {
+            try
+            {
+                Effect shader = Content.Load<Effect>($@"Shaders/{name}");
+
+                if (Shaders.ContainsKey(name))
+                    Shaders.Remove(name);
+
+                Shaders.Add(name, shader);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"Loading shader ({name}) failed:\n{exception.Message}");
+                return false;
+            }
+
+            return true;
+        }
+        public Effect GetShader(string name)
+        {
+            if (!Shaders.ContainsKey(name))
+                LoadShader(name);
+
+            return Shaders[name];
         }
         public bool LoadFont(string name, FontWeight weight = FontWeight.Regular)
         {

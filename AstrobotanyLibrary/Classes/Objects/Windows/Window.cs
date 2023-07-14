@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AstrobotanyLibrary.Classes.Objects
+namespace AstrobotanyLibrary.Classes.Objects.Windows
 {
     public abstract class Window
     {
@@ -65,13 +65,13 @@ namespace AstrobotanyLibrary.Classes.Objects
             Drawing.DrawRectangle(
                 spriteBatch,
                 Rectangle,
-                BackgroundColour);
+                BackgroundColour * 0.8f);
 
             spriteBatch.DrawString(
                 Main.AssetManager.GetFont("MonomaniacOne"),
                 Title.ToUpper(),
                 Position,
-                Color.White,
+                Color.White * 0.8f,
                 0f,
                 new Vector2(-32f, 0f),
                 0.5f,

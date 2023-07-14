@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AstrobotanyLibrary.Classes.Objects.Items;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AstrobotanyLibrary.Classes.Objects
+namespace AstrobotanyLibrary.Classes.Objects.Windows
 {
     public class ItemWindow : Window
     {

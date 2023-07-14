@@ -1,7 +1,21 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AstrobotanyLibrary.Classes.Objects;
+using Microsoft.Xna.Framework;
 
 namespace AstrobotanyLibrary.Classes.Utility
 {
+    public struct Intersection
+    {
+        public Intersection(float time, Vector2 contact, Vector2 normal)
+        {
+            this.time = time;
+            this.contact = contact;
+            this.normal = normal;
+        }
+
+        float time;
+        Vector2 contact;
+        Vector2 normal;
+    }
     public static class MathAdditions
     {
         public static float BezierCurve(float time)
@@ -76,6 +90,79 @@ namespace AstrobotanyLibrary.Classes.Utility
         public static Vector2 RandomLengthVector(float angle, float minLength, float maxLength)
         {
             return new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * (Main.Random.NextSingle() * (maxLength - minLength) + minLength);
+        }
+
+        public static Vector2 CartesionToIsometric(Vector2 input, float width, float height)
+        {
+            return new Vector2(
+                input.X / width + input.Y / height,
+                -input.X / width + input.Y / height) * 0.5f;
+        }
+        public static Vector2 IsometricToCartesion(Vector2 input, float width, float height)
+        {
+            return new Vector2(
+                (input.X - input.Y) * (width / 2),
+                (input.X + input.Y) * (height / 2));
+        }
+
+        public static Vector2 Reflect(Vector2 direction, Vector2 normal)
+        {
+            return direction - 2f * normal * (direction * normal);
+        }
+        public static (bool Collision, float Time, Vector2 Contact, Vector2 Normal) RayIntersect(Vector2 rayOrigin, Vector2 rayEnd, Rectangle target)
+        {
+            Vector2 rayDirection = rayEnd - rayOrigin;
+            Vector2 invertedDirection = new Vector2(1f / rayDirection.X, 1f / rayDirection.Y);
+
+            Vector2 near = (target.Location.ToVector2() - rayOrigin) * invertedDirection;
+            Vector2 far = ((target.Location + target.Size).ToVector2() - rayOrigin) * invertedDirection;
+
+            if (float.IsNaN(far.Y) || float.IsNaN(far.X))
+                return default;
+            if (float.IsNaN(near.Y) || float.IsNaN(near.X))
+                return default;
+
+            if (near.X > far.X)
+                (near.X, far.X) = (far.X, near.X);
+            if (near.Y > far.Y)
+                (near.Y, far.Y) = (far.Y, near.Y);
+
+            if (near.X > far.Y || near.Y > far.X)
+                return default;
+
+            float hit_near = MathF.Max(near.X, near.Y);
+            float hit_far = MathF.Min(far.X, far.Y);
+
+            if (hit_far < 0)
+                return default;
+
+            Vector2 contact = rayOrigin + (rayDirection * hit_near);
+
+            Vector2 normal = Vector2.Zero;
+            if (near.X > near.Y)
+                if (invertedDirection.X < 0)
+                    normal = Vector2.UnitX;
+                else normal = -Vector2.UnitX;
+            else if (near.X < near.Y)
+                if (invertedDirection.Y < 0)
+                    normal = Vector2.UnitY;
+                else normal = -Vector2.UnitY;
+
+            return (true, hit_near, contact, normal);
+        }
+        public static (bool Collision, float Time, Vector2 Contact, Vector2 Normal) IntersectDynamic(PhysicsObject source, GameObject target, float delta)
+        {
+            Rectangle sourceHitbox = source.Hitbox;
+            Rectangle targetHitbox = target.Hitbox;
+
+            Rectangle expandedTargetHitbox = new Rectangle(
+                targetHitbox.X - sourceHitbox.Width / 2,
+                targetHitbox.Y - sourceHitbox.Height / 2,
+                targetHitbox.Width + sourceHitbox.Width,
+                targetHitbox.Height + sourceHitbox.Height);
+
+            Vector2 start = source.Position + (sourceHitbox.Size.ToVector2() / 2f);
+            return RayIntersect(start, start + source.Velocity * delta, expandedTargetHitbox);
         }
     }
 }
