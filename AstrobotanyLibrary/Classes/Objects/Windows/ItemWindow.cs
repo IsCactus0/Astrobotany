@@ -30,6 +30,17 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+
+            spriteBatch.DrawString(
+                Main.AssetManager.GetFont("MonomaniacOne"),
+                Item.Category.ToString(),
+                Position + new Vector2(0, 12),
+                Color.White * 0.8f,
+                0f,
+                new Vector2(-32f, 0f),
+                0.3f,
+                SpriteEffects.None,
+                0f);
         }
     }
 }

@@ -3,7 +3,6 @@ using AstrobotanyLibrary.Classes.Objects;
 using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
 
 namespace AstrobotanyLibrary.Classes
 {
@@ -23,6 +22,7 @@ namespace AstrobotanyLibrary.Classes
         public static GraphicsDeviceManager Graphics { get; private set; }
         public static SpriteBatch SpriteBatch { get; private set; }
         public static RenderTarget2D RenderTarget { get; set; }
+        public static Effect ActiveEffect { get; set; }
         public static OpenSimplexNoise OpenSimplexNoise { get; private set; }
         public static Random Random { get; private set; }        
         public static Camera Camera { get; set; }
@@ -66,7 +66,8 @@ namespace AstrobotanyLibrary.Classes
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            BackgroundColour = new Color(46, 39, 48);
+            BackgroundColour = new Color(60, 70, 80);
+            ActiveEffect = null;// AssetManager.GetShader("Monochrome");
             GameSpeed = 1f;
         }
         protected override void UnloadContent()
@@ -93,9 +94,9 @@ namespace AstrobotanyLibrary.Classes
         {
             GraphicsDevice.SetRenderTarget(RenderTarget);
             GraphicsDevice.Clear(BackgroundColour);
-            
+
             base.Draw(gameTime);
-            
+
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
             SpriteBatch.Begin(
@@ -104,7 +105,7 @@ namespace AstrobotanyLibrary.Classes
                 SamplerState.PointClamp,
                 DepthStencilState.None,
                 RasterizerState.CullNone,
-                AssetManager.GetShader("Monochrome"));
+                ActiveEffect);
             
             SpriteBatch.Draw(
                 RenderTarget,
@@ -116,14 +117,14 @@ namespace AstrobotanyLibrary.Classes
 
             SpriteBatch.End();
         }
-        public static void Quit(Game game, bool save = true)
+        
+        public static void SaveQuit(object sender, EventArgs e)
         {
-            if (save)
-            {
-
-            }
-
-            game.Exit();
+            Quit(sender, e);
+        }
+        public static void Quit(object sender, EventArgs e)
+        {
+            Self.Exit();
         }
     }
 }

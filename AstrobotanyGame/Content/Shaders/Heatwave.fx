@@ -8,10 +8,17 @@
 #endif
 
 Texture2D SpriteTexture;
+Texture2D DistortionTexture;
+float Magnitude;
+float Time;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
 	Texture = <SpriteTexture>;
+};
+sampler2D DistortionTextureSampler = sampler_state
+{
+    Texture = <DistortionTexture>;
 };
 
 struct VertexShaderOutput
@@ -23,9 +30,12 @@ struct VertexShaderOutput
 
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
-    float4 col = tex2D(SpriteTextureSampler, input.TextureCoordinates) * input.Color;
-    col.rgb = (col.r + col.g + col.b) / 3.0f;
-    return col;
+    float4 pos = input.Position;
+	
+    float2 offset = (input.TextureCoordinates.x + Time, input.TextureCoordinates.y + Time);
+    float2 disp = tex2D(DistortionTextureSampler, offset).xy;
+    disp = ((disp * 2.0f) - 1.0f) * Magnitude;	
+    return tex2D(SpriteTextureSampler, (input.TextureCoordinates + disp)) * input.Color;
 }
 
 technique SpriteDrawing

@@ -41,6 +41,23 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
 
         public override void Update(float delta)
         {
+            // Rectangle rect = new Rectangle(
+            //     (int)Position.X + 12,
+            //     (int)Position.Y + 70,
+            //     48, 48);
+
+            // if (Main.InputManager.MouseIntersects(rect))
+            // {
+            //     Vector2 itemIndex = Main.InputManager.MouseScreenPosition() - Position;
+            //     itemIndex /= 51.0f;
+            //     itemIndex.Floor();
+            //     Point indexP = itemIndex.ToPoint();
+            // 
+            //     ItemStack? item = Inventory.Items[indexP.X, indexP.Y];
+            //     if (item is not null)
+            // 
+            // }
+
             base.Update(delta);
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -61,8 +78,10 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
 
                     if (Inventory.Items[x, y] is not null)
                         spriteBatch.Draw(
-                            Main.AssetManager.GetTexture(Inventory.Items[x, y].Item.Name),
-                            new Rectangle(x * 51, y * 51, 48, 48),
+                            Main.AssetManager.GetTexture($"Items/{Inventory.Items[x, y].Item.Name}"),
+                            new Rectangle(
+                                (int)Position.X + 12 + x * 51,
+                                (int)Position.Y + 70 + y * 51, 48, 48),
                             Color.White * 0.8f);
                 }
             }

@@ -2,11 +2,9 @@
 using AstrobotanyLibrary.Classes.Objects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System.Runtime.Serialization;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
-    [DataContract]
     public class InputManager : GameComponent
     {
         public InputManager(Game game): base(game)
@@ -55,9 +53,7 @@ namespace AstrobotanyLibrary.Classes.Managers
             };
         }
 
-        [DataMember]
         public Dictionary<Enums.Action, List<Keys>> KeyboardControls { get; set; }
-        [DataMember]
         public Dictionary<Enums.Action, List<Buttons>> GamePadControls { get; set; }
         public KeyboardState KeyboardState { get; private set; }
         public KeyboardState LastKeyboardState { get; private set; }
@@ -80,7 +76,7 @@ namespace AstrobotanyLibrary.Classes.Managers
             GamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (InputPressed(Enums.Action.Exit))
-                Main.Quit(Main.Self, true);
+                Main.Self.Exit();
             if (InputPressed(Enums.Action.ZoomIn))
                 Main.Camera.Scale += delta;
             if (InputPressed(Enums.Action.ZoomOut))

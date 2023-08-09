@@ -5,6 +5,22 @@ namespace AstrobotanyLibrary.Classes.Objects.Tiles
 {
     public class Tile
     {
+        public Tile()
+        {
+            Position = Vector2.Zero;
+            Name = "";
+        }
+        public Tile(float x, float y)
+        {
+            Position = new Vector2(x, y);
+            Name = "";
+        }
+        public Tile(float x, float y, string name)
+        {
+            Position = new Vector2(x, y);
+            Name = name;
+        }
+
         public string Name { get; set; }
         public Vector2 Position { get; set; }
         public Rectangle Bounds
