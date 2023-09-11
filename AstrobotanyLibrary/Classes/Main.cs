@@ -42,6 +42,9 @@ namespace AstrobotanyLibrary.Classes
             Random = new Random();
             Camera = new Camera();
 
+            Settings = new Settings();
+            Settings.LoadSettings();
+
             AssetManager = new AssetManager(this);
             InputManager = new InputManager(this);
             TileManager = new TileManager(this);
@@ -57,17 +60,14 @@ namespace AstrobotanyLibrary.Classes
             Components.Add(ParticleManager);
             Components.Add(InterfaceManager);
 
-            Settings = new Settings();
-            Settings.LoadSettings();
             Settings.LoadControls();
-
             base.Initialize();
         }
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             BackgroundColour = new Color(60, 70, 80);
-            ActiveEffect = null;// AssetManager.GetShader("Monochrome");
+            ActiveEffect = null;
             GameSpeed = 1f;
         }
         protected override void UnloadContent()
@@ -82,13 +82,13 @@ namespace AstrobotanyLibrary.Classes
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (InputManager.InputPressed(Enums.Action.MoveUp))
-                Camera.Offset -= Vector2.UnitY * delta * 100f;
+                Camera.Offset -= Vector2.UnitY * delta * 1000f;
             else if (InputManager.InputPressed(Enums.Action.MoveDown))
-                Camera.Offset += Vector2.UnitY * delta * 100f;
+                Camera.Offset += Vector2.UnitY * delta * 1000f;
             if (InputManager.InputPressed(Enums.Action.MoveLeft))
-                Camera.Offset -= Vector2.UnitX * delta * 100f;
+                Camera.Offset -= Vector2.UnitX * delta * 1000f;
             else if (InputManager.InputPressed(Enums.Action.MoveRight))
-                Camera.Offset += Vector2.UnitX * delta * 100f;
+                Camera.Offset += Vector2.UnitX * delta * 1000f;
         }
         protected override void Draw(GameTime gameTime)
         {
