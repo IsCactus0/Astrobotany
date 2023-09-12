@@ -7,40 +7,41 @@ namespace AstrobotanyLibrary.Classes.Objects.Tiles
     {
         public Tile()
         {
-            Position = Vector3.Zero;
+            Position = Vector2.Zero;
             Name = "";
         }
-        public Tile(float x, float y, float z)
+        public Tile(float x, float y)
         {
-            Position = new Vector3(x, y, z);
+            Position = new Vector2(x, y);
             Name = "";
         }
-        public Tile(float x, float y, float z, string name)
+        public Tile(float x, float y, string name)
         {
-            Position = new Vector3(x, y, z);
+            Position = new Vector2(x, y);
             Name = name;
         }
 
         public string Name { get; set; }
-        public Vector3 Position { get; set; }
+        public Vector2 Position { get; set; }
         public Rectangle Bounds
         {
             get
             {
                 return new Rectangle(
                     (int)Position.X * 16,
-                    (int)(Position.Y + Position.Z) * 16,
+                    (int)(Position.Y) * 16,
                     32,
                     32);
             }
         }
+        
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
                 Main.AssetManager.GetTexture(Name),
                 new Rectangle(
-                    (int)((Position.X - (Position.Y + Position.Z)) * 16f),
-                    (int)((Position.X + (Position.Y + Position.Z)) * 8f),
+                    (int)((Position.X - Position.Y) * 16f),
+                    (int)((Position.X + Position.Y) * 8f),
                     32, 32),
                 Color.White);
         }

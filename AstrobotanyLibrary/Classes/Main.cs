@@ -13,7 +13,7 @@ namespace AstrobotanyLibrary.Classes
         
         public static AssetManager AssetManager { get; private set; }
         public static InputManager InputManager { get; private set; }
-        public static TileManager TileManager { get; private set; }
+        public static WorldManager WorldManager { get; private set; }
         public static DecorationManager DecorationManager { get; private set; }
         public static EntityManager EntityManager { get; private set; }
         public static ParticleManager ParticleManager { get; private set; }
@@ -47,14 +47,14 @@ namespace AstrobotanyLibrary.Classes
 
             AssetManager = new AssetManager(this);
             InputManager = new InputManager(this);
-            TileManager = new TileManager(this);
+            WorldManager = new WorldManager(this);
             DecorationManager = new DecorationManager(this);
             EntityManager = new EntityManager(this);
             ParticleManager = new ParticleManager(this);
             InterfaceManager = new InterfaceManager(this);
 
             Components.Add(InputManager);
-            Components.Add(TileManager);
+            Components.Add(WorldManager);
             Components.Add(DecorationManager);
             Components.Add(EntityManager);
             Components.Add(ParticleManager);
@@ -78,17 +78,6 @@ namespace AstrobotanyLibrary.Classes
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (InputManager.InputPressed(Enums.Action.MoveUp))
-                Camera.Offset -= Vector2.UnitY * delta * 1000f;
-            else if (InputManager.InputPressed(Enums.Action.MoveDown))
-                Camera.Offset += Vector2.UnitY * delta * 1000f;
-            if (InputManager.InputPressed(Enums.Action.MoveLeft))
-                Camera.Offset -= Vector2.UnitX * delta * 1000f;
-            else if (InputManager.InputPressed(Enums.Action.MoveRight))
-                Camera.Offset += Vector2.UnitX * delta * 1000f;
         }
         protected override void Draw(GameTime gameTime)
         {

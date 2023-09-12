@@ -65,7 +65,6 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
             base.Draw(spriteBatch);
 
             for (int x = 0; x < Inventory.Items.GetLength(0); x++)
-            {
                 for (int y = 0; y < Inventory.Items.GetLength(1); y++)
                 {
                     Drawing.DrawRectangle(
@@ -84,7 +83,6 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
                                 (int)Position.Y + 70 + y * 51, 48, 48),
                             Color.White * 0.8f);
                 }
-            }
         }
         public override Rectangle CalculateSize()
         {

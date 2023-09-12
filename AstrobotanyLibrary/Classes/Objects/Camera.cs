@@ -25,6 +25,7 @@ namespace AstrobotanyLibrary.Classes.Objects
             get
             {
                 return Matrix.CreateTranslation(-Position.X, -Position.Y, 0) *
+                       Matrix.CreateTranslation(-Offset.X, -Offset.Y, 0) *
                        Matrix.CreateRotationZ(Rotation) *
                        Matrix.CreateScale(Scale, Scale, 1) *
                        Matrix.CreateTranslation(Viewport.Width / 2f, Viewport.Height / 2f, 0);
@@ -46,8 +47,8 @@ namespace AstrobotanyLibrary.Classes.Objects
             get
             {
                 return new Rectangle(
-                    (int)(Position.X - (Viewport.Width / 2f) * (1f / Scale)),
-                    (int)(Position.Y - (Viewport.Height / 2f) * (1f / Scale)),
+                    (int)(Position.X - Viewport.Width / 2f * (1f / Scale)),
+                    (int)(Position.Y - Viewport.Height / 2f * (1f / Scale)),
                     (int)(Viewport.Width * (1f / Scale)),
                     (int)(Viewport.Height * (1f / Scale)));
             }
@@ -57,13 +58,17 @@ namespace AstrobotanyLibrary.Classes.Objects
             get
             {
                 return new Rectangle(
-                    (int)((Position.X - (Viewport.Width / 2f) * (1f / Scale)) - PhysicsDistance),
-                    (int)((Position.Y - (Viewport.Height / 2f) * (1f / Scale)) - PhysicsDistance),
+                    (int)(Position.X - Viewport.Width / 2f * (1f / Scale) - PhysicsDistance),
+                    (int)(Position.Y - Viewport.Height / 2f * (1f / Scale) - PhysicsDistance),
                     (int)((Viewport.Width * (1f / Scale)) + PhysicsDistance * 2f),
                     (int)((Viewport.Height * (1f / Scale)) + PhysicsDistance * 2f));
             }
         }
 
+        public void Update(float delta, float strength)
+        {
+            Position = Vector2.Lerp(Position, Offset, delta * strength);
+        }
         public void Update(float delta, float strength, Vector2 target)
         {
             Position = Vector2.Lerp(Position, Offset + target, delta * strength);

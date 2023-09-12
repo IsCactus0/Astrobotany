@@ -26,14 +26,17 @@ namespace AstrobotanyLibrary.Classes.Objects
                 {
                     // Check if slot is empty.
                     if (Items[x, y] is null)
-                        continue;
+                    {
+                        Items[x, y] = itemStack;
+                        return true;
+                    }
 
-                    // Check if item is the same.
+                    // Check if items are the same.
                     if (Items[x, y].Item.Name != itemStack.Item.Name)
                         continue;
 
                     // Merge stacks together if enough space is left.
-                    if (Items[x, y].Count + itemStack.Count < Items[x, y].MaxStack)
+                    if (Items[x, y].Count + itemStack.Count <= Items[x, y].MaxStack)
                     {
                         Items[x, y].Count += itemStack.Count;
                         return true;

@@ -12,18 +12,8 @@ namespace AstrobotanyLibrary.Classes.Managers
                     : base(game)
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            InventoryWindow = new ContainerWindow("Inventory", new Color(32, 26, 34), new Vector2(32), 4, 7);
-            InventoryWindow.Inventory.Items[0, 0] = new ItemStack(
-                    new Item(
-                        "Capacitor",
-                        "A capacitor is a device that" +
-                        "stores electrical energy in an" +
-                        "electric field by virtue of" +
-                        "accumulating electric charges" +
-                        "on two close surfaces insulated" +
-                        "from each other",
-                        12, Enums.ItemCategory.Component),
-                    2, 8);
+            InventoryWindow = new ContainerWindow("Inventory", new Color(42, 42, 42), new Vector2(32), 4, 7);
+            InventoryWindow.Inventory.AddItem(new ItemStack(Items.Capacitor, 2, 8));
             Windows = new List<Window> { InventoryWindow };
             CursorSize = 8f;
             InterfaceScale = 1f;
@@ -43,7 +33,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             Main.Camera.Scale -= delta * Main.InputManager.MouseScrollValue() * 10f;
             Main.Camera.Scale = Math.Clamp(Main.Camera.Scale, 1f, 10f);
-            Main.Camera.Update(delta, 80f, Vector2.Zero);// Main.EntityManager.Player.Position);
+            Main.Camera.Update(delta, 80f, Vector2.Zero);
 
             if (SelectedIndex >= 0 && SelectedIndex < Windows.Count - 1)
             {

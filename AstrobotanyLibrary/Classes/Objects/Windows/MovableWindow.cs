@@ -1,6 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
-using System.Security.Principal;
 
 namespace AstrobotanyLibrary.Classes.Objects.Windows
 {

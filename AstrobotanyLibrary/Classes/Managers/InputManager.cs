@@ -63,6 +63,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         public GamePadState LastGamePadState { get; private set; }
         public Vector2 SelectionStart { get; private set; }
         public Vector2 SelectionEnd { get; private set; }
+        private Vector2? dragStartPosition { get; set; }
 
         public override void Update(GameTime gameTime)
         {
@@ -77,10 +78,30 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             if (InputPressed(Enums.Action.Exit))
                 Main.Self.Exit();
+
             if (InputPressed(Enums.Action.ZoomIn))
                 Main.Camera.Scale += delta;
             if (InputPressed(Enums.Action.ZoomOut))
                 Main.Camera.Scale -= delta;
+
+            if (InputPressed(Enums.Action.MoveUp))
+                Main.Camera.Offset -= Vector2.UnitY * delta * 100f;
+            else if (InputPressed(Enums.Action.MoveDown))
+                Main.Camera.Offset += Vector2.UnitY * delta * 100f;
+            if (InputPressed(Enums.Action.MoveLeft))
+                Main.Camera.Offset -= Vector2.UnitX * delta * 100f;
+            else if (InputPressed(Enums.Action.MoveRight))
+                Main.Camera.Offset += Vector2.UnitX * delta * 100f;
+
+            if (dragStartPosition is not null)
+            {
+                Main.Camera.Offset -= MouseWorldPosition(Main.Camera) - dragStartPosition.Value;
+            
+                if (MouseFirstReleased(MouseButton.Middle))
+                    dragStartPosition = null;
+            }
+            else if (MouseFirstPressed(MouseButton.Middle))
+                dragStartPosition = MouseWorldPosition(Main.Camera);
 
             base.Update(gameTime);
         }
