@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace AstrobotanyLibrary.Classes.Enums
+﻿namespace AstrobotanyLibrary.Classes.Enums
 {
     public enum WindowMode
     {

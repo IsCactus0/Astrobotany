@@ -2,6 +2,9 @@
 {
     public enum SortMode
     {
+        Name,
         Count,
+        Value,
+        Weight
     }
 }

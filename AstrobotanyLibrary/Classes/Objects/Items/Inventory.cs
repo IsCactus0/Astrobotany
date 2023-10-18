@@ -1,6 +1,6 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
 
-namespace AstrobotanyLibrary.Classes.Objects
+namespace AstrobotanyLibrary.Classes.Objects.Items
 {
     public class Inventory
     {

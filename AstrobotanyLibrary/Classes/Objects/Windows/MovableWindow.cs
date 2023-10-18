@@ -28,8 +28,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
             Vector2 mousePos = Main.InputManager.MouseScreenPosition();
             int index = Main.InterfaceManager.Windows.FindIndex(x => x == this);
 
-            if (!MathAdditions.PointIntersects(
-                mousePos.ToPoint(), Rectangle))
+            if (!MathAdditions.PointIntersects(mousePos.ToPoint(), Rectangle))
             {
                 grabStart = -Vector2.One;
                 if (Main.InterfaceManager.SelectedIndex == index)

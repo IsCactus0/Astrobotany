@@ -1,6 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Objects
 {
@@ -17,142 +16,22 @@ namespace AstrobotanyLibrary.Classes.Objects
             Mass = 1f;
             Friction = 0.5f;
         }
-        protected PhysicsObject(string name)
-            : base(name)
+        protected PhysicsObject(PhysicsObject copy)
         {
-            Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid)
-            : base(name, solid)
-        {
-            Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int size)
-            : base(name, solid, size)
-        {
-            Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int width, int height)
-            : base(name, solid, width, height)
-        {
-            Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight)
-        {
-            Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y)
-        {
-            Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r)
-        {
-            Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r)
-        {
-            Velocity = new Vector2(vx, vy);
-            RotationalVelocity = vr;
-            Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r)
-        {
-            Velocity = new Vector2(vx, vy);
-            RotationalVelocity = vr;
-            Acceleration = new Vector2(ax, ay);
-            RotationalAcceloration = ar;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = 1f;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar, float mass)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r)
-        {
-            Velocity = new Vector2(vx, vy);
-            RotationalVelocity = vr;
-            Acceleration = new Vector2(ax, ay);
-            RotationalAcceloration = ar;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = mass;
-            Friction = 0.5f;
-        }
-        protected PhysicsObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar, float mass, float friction)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r)
-        {
-            Velocity = new Vector2(vx, vy);
-            RotationalVelocity = vr;
-            Acceleration = new Vector2(ax, ay);
-            RotationalAcceloration = ar;
-            Force = Vector2.Zero;
-            RotationalForce = 0f;
-            Mass = mass;
-            Friction = friction;
+            Velocity = copy.Velocity;
+            RotationalVelocity = copy.RotationalVelocity;
+            Acceleration = copy.Acceleration;
+            RotationalAcceloration = copy.RotationalAcceloration;
+            Force = copy.Force;
+            RotationalForce = copy.RotationalForce;
+            Mass = copy.Mass;
+            Friction = copy.Friction;
         }
 
         public Vector2 Velocity { get; set; }
         public Vector2 Acceleration { get; set; }
         public Vector2 Force { get; set; }
+        public Vector2 LastPosition { get; protected set; }
         public float RotationalVelocity { get; set; }
         public float RotationalAcceloration { get; set; }
         public float RotationalForce { get; set; }
@@ -168,7 +47,7 @@ namespace AstrobotanyLibrary.Classes.Objects
             colliding.Remove(this);
             return colliding;
         }
-        public virtual void HandleCollisions(float delta)
+        public virtual void ProcessCollisions(float delta)
         {
             if (!Solid)
                 return;
@@ -196,11 +75,6 @@ namespace AstrobotanyLibrary.Classes.Objects
         }
         public override void Reset()
         {
-            ResetForces();
-            base.Reset();
-        }
-        public virtual void ResetForces()
-        {
             Velocity = Vector2.Zero;
             Acceleration = Vector2.Zero;
             Force = Vector2.Zero;
@@ -208,9 +82,13 @@ namespace AstrobotanyLibrary.Classes.Objects
             RotationalVelocity = 0f;
             RotationalAcceloration = 0f;
             RotationalForce = 0f;
+
+            base.Reset();
         }
         public override void Update(float delta)
         {
+            LastPosition = Position;
+
             RotationalAcceloration = RotationalForce / Mass;
             RotationalVelocity += RotationalAcceloration * delta;
             RotationalVelocity *= MathF.Pow(Friction, delta * Mass);
@@ -229,11 +107,7 @@ namespace AstrobotanyLibrary.Classes.Objects
             Position += Velocity * delta;
             Force = Vector2.Zero;
 
-            HandleCollisions(delta);
-        }
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
+            ProcessCollisions(delta);
         }
         public override string ToString()
         {

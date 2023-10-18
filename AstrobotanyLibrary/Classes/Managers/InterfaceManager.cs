@@ -1,6 +1,4 @@
-﻿using AstrobotanyLibrary.Classes.Objects;
-using AstrobotanyLibrary.Classes.Objects.Items;
-using AstrobotanyLibrary.Classes.Objects.Windows;
+﻿using AstrobotanyLibrary.Classes.Objects.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,9 +10,7 @@ namespace AstrobotanyLibrary.Classes.Managers
                     : base(game)
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            InventoryWindow = new ContainerWindow("Inventory", new Color(42, 42, 42), new Vector2(32), 4, 7);
-            InventoryWindow.Inventory.AddItem(new ItemStack(Items.Capacitor, 2, 8));
-            Windows = new List<Window> { InventoryWindow };
+            Windows = new List<Window>();
             CursorSize = 8f;
             InterfaceScale = 1f;
         }

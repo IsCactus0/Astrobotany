@@ -53,10 +53,6 @@ namespace AstrobotanyLibrary.Classes.Managers
                 SelectedTile = Tiles[selectX, selectY];
             }
 
-            // ActiveEffect.Parameters["Scale"].SetValue(10f / Main.Camera.Scale);
-            // ActiveEffect.Parameters["Magnitude"].SetValue(Main.Camera.Scale / 300f); 
-            // ActiveEffect.Parameters["Time"].SetValue((float)gameTime.TotalGameTime.TotalMinutes * 10.0f);
-
             base.Update(gameTime);
         }
         public override void Draw(GameTime gameTime)

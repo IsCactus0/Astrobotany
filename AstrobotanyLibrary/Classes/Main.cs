@@ -14,7 +14,7 @@ namespace AstrobotanyLibrary.Classes
         public static AssetManager AssetManager { get; private set; }
         public static InputManager InputManager { get; private set; }
         public static WorldManager WorldManager { get; private set; }
-        public static DecorationManager DecorationManager { get; private set; }
+        public static PropManager DecorationManager { get; private set; }
         public static EntityManager EntityManager { get; private set; }
         public static ParticleManager ParticleManager { get; private set; }
         public static InterfaceManager InterfaceManager { get; private set; }
@@ -48,7 +48,7 @@ namespace AstrobotanyLibrary.Classes
             AssetManager = new AssetManager(this);
             InputManager = new InputManager(this);
             WorldManager = new WorldManager(this);
-            DecorationManager = new DecorationManager(this);
+            DecorationManager = new PropManager(this);
             EntityManager = new EntityManager(this);
             ParticleManager = new ParticleManager(this);
             InterfaceManager = new InterfaceManager(this);

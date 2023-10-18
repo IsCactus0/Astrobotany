@@ -11,89 +11,10 @@ namespace AstrobotanyLibrary.Classes.Objects.Entities
             CurrentAnimation = "";
             Animations = new Dictionary<string, Animation>();
         }
-        protected AnimatedEntity(string name)
-            : base(name)
+        protected AnimatedEntity(AnimatedEntity copy)
         {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid)
-            : base(name, solid)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int size)
-            : base(name, solid, size)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int width, int height)
-            : base(name, solid, width, height)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r, vx, vy, vr)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r, vx, vy, vr, ax, ay, ar)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar, float mass)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r, vx, vy, vr, ax, ay, ar, mass)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar, float mass, float friction)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r, vx, vy, vr, ax, ay, ar, mass, friction)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar, float mass, float friction, float health)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r, vx, vy, vr, ax, ay, ar, mass, friction, health)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar, float mass, float friction, float health, float maxHealth)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r, vx, vy, vr, ax, ay, ar, mass, friction, health, maxHealth)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
-        }
-        protected AnimatedEntity(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r, float vx, float vy, float vr, float ax, float ay, float ar, float mass, float friction, float health, float maxHealth, float damageResist)
-            : base(name, solid, spriteWidth, spriteHeight, hitboxWidth, hitboxHeight, x, y, r, vx, vy, vr, ax, ay, ar, mass, friction, health, maxHealth, damageResist)
-        {
-            CurrentAnimation = "";
-            Animations = new Dictionary<string, Animation>();
+            CurrentAnimation = copy.CurrentAnimation;
+            Animations = copy.Animations;
         }
 
         public string CurrentAnimation { get; set; }
@@ -115,6 +36,15 @@ namespace AstrobotanyLibrary.Classes.Objects.Entities
                     (int)Position.Y,
                     32, 32),
                 Color.White);
+        }
+        public override string ToString()
+        {
+            string baseString = base.ToString();
+            baseString.Replace(GetType().BaseType.Name, GetType().Name);
+
+            return baseString +
+                   $"\n   CurrentAnimation: {CurrentAnimation}" +
+                   $"\n   DamageResistance: {DamageResistance}";
         }
     }
 }

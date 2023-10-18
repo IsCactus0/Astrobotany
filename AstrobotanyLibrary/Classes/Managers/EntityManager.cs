@@ -21,7 +21,10 @@ namespace AstrobotanyLibrary.Classes.Managers
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
-            QuadTree = new QuadTree(Main.Camera.PhysicsBoundingBox, 8);
+            if (Entities.Count > 0 || delta <= 0f)
+                return;
+
+            QuadTree = new QuadTree(Main.Camera.BoundingBox, 8);
 
             for (int i = Entities.Count - 1; i >= 0; i--)
             {
@@ -32,8 +35,6 @@ namespace AstrobotanyLibrary.Classes.Managers
                     QuadTree.Add(entity);
                 }
             }
-
-            base.Update(gameTime);
         }
         public override void Draw(GameTime gameTime)
         {
@@ -53,7 +54,6 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             SpriteBatch.End();
         }
-
         public List<GameObject> FindAllInRange(Vector2 position, float range)
         {
             Rectangle bounds = new Rectangle(

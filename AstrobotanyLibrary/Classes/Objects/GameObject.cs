@@ -7,75 +7,19 @@ namespace AstrobotanyLibrary.Classes.Objects
     {
         protected GameObject()
         {
-            Name = "";
             Solid = true;
             Hitbox = new Rectangle(0, 0, 32, 32);
             Sprite = new Rectangle(0, 0, 32, 32);
             Position = Vector2.Zero;
             Rotation = 0f;
         }
-        protected GameObject(string name)
+        protected GameObject(GameObject copy)
         {
-            Name = name;
-            Solid = true;
-            Hitbox = new Rectangle(0, 0, 32, 32);
-            Sprite = new Rectangle(0, 0, 32, 32);
-            Position = Vector2.Zero;
-            Rotation = 0f;
-        }
-        protected GameObject(string name, bool solid)
-        {
-            Name = name;
-            Solid = solid;
-            Hitbox = new Rectangle(0, 0, 32, 32);
-            Sprite = new Rectangle(0, 0, 32, 32);
-            Position = Vector2.Zero;
-            Rotation = 0f;
-        }
-        protected GameObject(string name, bool solid, int size)
-        {
-            Name = name;
-            Solid = solid;
-            Hitbox = new Rectangle(0, 0, size, size);
-            Sprite = new Rectangle(0, 0, size, size);
-            Position = Vector2.Zero;
-            Rotation = 0f;
-        }
-        protected GameObject(string name, bool solid, int width, int height)
-        {
-            Name = name;
-            Solid = solid;
-            Hitbox = new Rectangle(0, 0, width, height);
-            Sprite = new Rectangle(0, 0, width, height);
-            Position = Vector2.Zero;
-            Rotation = 0f;
-        }
-        protected GameObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight)
-        {
-            Name = name;
-            Solid = solid;
-            Hitbox = new Rectangle(0, 0, hitboxWidth, hitboxHeight);
-            Sprite = new Rectangle(0, 0, spriteWidth, spriteHeight);
-            Position = Vector2.Zero;
-            Rotation = 0f;
-        }
-        protected GameObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y)
-        {
-            Name = name;
-            Solid = solid;
-            Hitbox = new Rectangle(0, 0, hitboxWidth, hitboxHeight);
-            Sprite = new Rectangle(0, 0, spriteWidth, spriteHeight);
-            Position = new Vector2(x, y);
-            Rotation = 0f;
-        }
-        protected GameObject(string name, bool solid, int spriteWidth, int spriteHeight, int hitboxWidth, int hitboxHeight, float x, float y, float r)
-        {
-            Name = name;
-            Solid = solid;
-            Hitbox = new Rectangle(0, 0, hitboxWidth, hitboxHeight);
-            Sprite = new Rectangle(0, 0, spriteWidth, spriteHeight);
-            Position = new Vector2(x, y);
-            Rotation = r;
+            Solid = copy.Solid;
+            Hitbox = copy.Hitbox;
+            Sprite = copy.Sprite;
+            Position = copy.Position;
+            Rotation = copy.Rotation;
         }
 
         protected Rectangle sprite_;
@@ -114,6 +58,12 @@ namespace AstrobotanyLibrary.Classes.Objects
             }
         }
         public Vector2 Position { get; set; }
+        public Vector2 Centre {
+            get
+            {
+                return Position + Sprite.Center.ToVector2();
+            }
+        }
         public float Rotation { get; set; }
 
         public abstract void Destroy();
@@ -123,17 +73,13 @@ namespace AstrobotanyLibrary.Classes.Objects
             Rotation = 0f;
         }
         public abstract void Update(float delta);
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(Main.AssetManager.GetTexture(Name), Sprite, Color.White);
-        }
+        public abstract void Draw(SpriteBatch spriteBatch);
         public override string ToString()
         {
             Rectangle hitbox = Hitbox;
             Rectangle sprite = Sprite;
 
             return $"[{GetType().Name}]" +
-                   $"\n   Name: \"{Name}\"" +
                    $"\n   Solid: {Solid}" +
                    $"\n   Hitbox:" +
                    $"\n      Size: {hitbox.Width}, {hitbox.Height}" +

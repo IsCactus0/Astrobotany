@@ -25,33 +25,24 @@ namespace AstrobotanyLibrary.Classes.Managers
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
+            if (Particles.Count > 0 || delta <= 0f)
+                return;
+
             QuadTree = new QuadTree(Main.Camera.BoundingBox, 32);
-
-            // if (Particles.Count < MaxParticles)
-            // {
-            //     Particles.Add(
-            //         new Rain(
-            //             "Rain", false,
-            //             4, 4, 4, 4,
-            //             Main.Random.Next(-Main.Camera.BoundingBox.Width / 2, Main.Camera.BoundingBox.Width / 2),
-            //             Main.Camera.Position.Y, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 1f, 0.001f, Color.White));
-            // }
-
             if (Particles.Count > MaxParticles)
                 Particles.RemoveRange(0, Particles.Count - MaxParticles);
 
             for (int i = Particles.Count - 1; i >= 0; i--)
             {
                 Particle particle = Particles[i];
-                if (!MathAdditions.VectorIntersects(Particles[i].Position, Main.Camera.PhysicsBoundingBox)) {
+                if (!MathAdditions.VectorIntersects(particle.Position, Main.Camera.BoundingBox)) {
                     particle.Destroy();
                     continue;
                 }
 
                 particle.Update(delta);
+                QuadTree.Add(particle);
             }
-
-            base.Update(gameTime);
         }
         public override void Draw(GameTime gameTime)
         {

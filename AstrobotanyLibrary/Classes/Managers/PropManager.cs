@@ -5,27 +5,30 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
-    public class DecorationManager : DrawableGameComponent
+    public class PropManager : DrawableGameComponent
     {
-        public DecorationManager(Game game)
+        public PropManager(Game game)
             : base(game)
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
-            Decorations = new List<Decoration>();
+            Props = new List<Prop>();
         }
 
-        public static SpriteBatch SpriteBatch { get; private set; }
-        public List<Decoration> Decorations { get; set; }
+        public SpriteBatch SpriteBatch { get; private set; }
+        public List<Prop> Props { get; set; }
         public QuadTree QuadTree { get; private set; }
 
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
+            if (Props.Count > 0 || delta <= 0f)
+                return;
+
             QuadTree = new QuadTree(Main.Camera.PhysicsBoundingBox, 4);
 
-            for (int i = Decorations.Count - 1; i >= 0; i--)
+            for (int i = Props.Count - 1; i >= 0; i--)
             {
-                Decoration decoration = Decorations[i];
+                Prop decoration = Props[i];
                 if (Main.Camera.PhysicsBoundingBox.Intersects(decoration.Hitbox))
                 {
                     decoration.Update(delta);
@@ -45,7 +48,7 @@ namespace AstrobotanyLibrary.Classes.Managers
                 RasterizerState.CullNone,
                 null, Main.Camera.Transform);
 
-            foreach (Decoration decoration in Decorations)
+            foreach (Prop decoration in Props)
                 if (Main.Camera.BoundingBox.Intersects(decoration.Sprite))
                     decoration.Draw(SpriteBatch);
 

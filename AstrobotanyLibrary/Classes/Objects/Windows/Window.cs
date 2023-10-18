@@ -46,10 +46,9 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
         {
             get
             {
-                Rectangle rect = Rectangle;
                 return new Vector2(
-                    Math.Max(rect.Width, Main.AssetManager.GetFont("MonomaniacOne").MeasureString(Title.ToUpper()).X * 0.5f + 24),
-                    Math.Max(rect.Height, 58));
+                    Math.Max(100, Main.AssetManager.GetFont("MonomaniacOne").MeasureString(Title.ToUpper()).X * 0.5f + 24),
+                    Math.Max(100, 58));
             }
         }
         public Rectangle Rectangle
@@ -83,6 +82,10 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
                 new Vector2(Position.X + 4f, Position.Y),
                 new Vector2(Position.X + Size.X - 4f, Position.Y),
                 8f, Color.White);
+        }
+        public virtual void Remove()
+        {
+            Main.InterfaceManager.Windows.Remove(this);
         }
         public virtual Rectangle CalculateSize()
         {

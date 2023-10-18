@@ -8,16 +8,16 @@ namespace AstrobotanyLibrary.Classes.Objects
     {
         public Vector2 Entrance { get; protected set; }
         public List<Entity> Entities { get; protected set; }
-        public List<Decoration> Decorations { get; protected set; }
+        public List<Prop> Decorations { get; protected set; }
 
         public void LoadRoom()
         {
             Main.ParticleManager.Particles.Clear();
             Main.EntityManager.Entities.Clear();
-            Main.DecorationManager.Decorations.Clear();
+            Main.DecorationManager.Props.Clear();
 
             Main.EntityManager.Entities.AddRange(Entities);
-            Main.DecorationManager.Decorations.AddRange(Decorations);
+            Main.DecorationManager.Props.AddRange(Decorations);
         }
     }
 }

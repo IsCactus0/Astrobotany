@@ -1,7 +1,7 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AstrobotanyLibrary.Classes.Utility
+namespace AstrobotanyLibrary.Classes.Objects
 {
     public class FontFamily
     {
