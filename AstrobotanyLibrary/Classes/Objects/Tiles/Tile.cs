@@ -1,49 +1,44 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AstrobotanyLibrary.Classes.Managers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Objects.Tiles
 {
-    public class Tile
+    public class Tile : GameObject
     {
         public Tile()
+            : base()
         {
-            Position = Vector2.Zero;
-            Name = "";
+            Name = "Crate";
+            Remove = false;
         }
-        public Tile(float x, float y)
+        public Tile(int x, int y)
+            : base(x, y)
         {
-            Position = new Vector2(x, y);
-            Name = "";
-        }
-        public Tile(float x, float y, string name)
-        {
-            Position = new Vector2(x, y);
-            Name = name;
+            Name = "Crate";
+            Remove = false;
         }
 
-        public string Name { get; set; }
-        public Vector2 Position { get; set; }
-        public Rectangle Bounds
+        public bool Remove { get; set; }
+
+        public override void Destroy()
         {
-            get
-            {
-                return new Rectangle(
-                    (int)Position.X * 16,
-                    (int)(Position.Y) * 16,
-                    32,
-                    32);
-            }
+            Remove = true;
         }
-        
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public override void Update(float delta)
         {
+            
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Rectangle sprite = Sprite;
             spriteBatch.Draw(
                 Main.AssetManager.GetTexture(Name),
                 new Rectangle(
-                    (int)((Position.X - Position.Y) * 16f),
-                    (int)((Position.X + Position.Y) * 8f),
-                    32, 32),
-                Color.White);
+                    (int)((sprite.X - sprite.Y) * 16f),
+                    (int)((sprite.X + sprite.Y) * 8f),
+                    sprite.Width, sprite.Height),
+                Main.SceneManager.SelectedTile == this ? Color.Red : Color.White);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace AstrobotanyLibrary.Classes.Objects
     {
         public Camera()
         {
-            Scale = 1f;
+            Scale = 6f;
             Rotation = 0f;
             PhysicsDistance = 1000f;
             Position = Vector2.Zero;

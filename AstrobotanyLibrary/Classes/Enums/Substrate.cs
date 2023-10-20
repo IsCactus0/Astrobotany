@@ -2,6 +2,7 @@
 {
     public enum Substrate
     {
+        Empty,
         Soil,
         Mulch,
         Peat,

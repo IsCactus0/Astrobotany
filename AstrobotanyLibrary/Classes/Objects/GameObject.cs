@@ -11,7 +11,13 @@ namespace AstrobotanyLibrary.Classes.Objects
             Hitbox = new Rectangle(0, 0, 32, 32);
             Sprite = new Rectangle(0, 0, 32, 32);
             Position = Vector2.Zero;
-            Rotation = 0f;
+        }
+        protected GameObject(int x, int y)
+        {
+            Solid = true;
+            Hitbox = new Rectangle(0, 0, 32, 32);
+            Sprite = new Rectangle(0, 0, 32, 32);
+            Position = new Vector2(x, y);
         }
         protected GameObject(GameObject copy)
         {
@@ -19,7 +25,6 @@ namespace AstrobotanyLibrary.Classes.Objects
             Hitbox = copy.Hitbox;
             Sprite = copy.Sprite;
             Position = copy.Position;
-            Rotation = copy.Rotation;
         }
 
         protected Rectangle sprite_;
@@ -64,13 +69,11 @@ namespace AstrobotanyLibrary.Classes.Objects
                 return Position + Sprite.Center.ToVector2();
             }
         }
-        public float Rotation { get; set; }
 
         public abstract void Destroy();
         public virtual void Reset()
         {
             Position = Vector2.Zero;
-            Rotation = 0f;
         }
         public abstract void Update(float delta);
         public abstract void Draw(SpriteBatch spriteBatch);
@@ -87,8 +90,7 @@ namespace AstrobotanyLibrary.Classes.Objects
                    $"\n   Sprite: {sprite.Location.X}, {sprite.Location.Y}" +
                    $"\n      Size: {sprite.Width}, {sprite.Height}" +
                    $"\n      Position: {sprite.Location.X}, {sprite.Location.Y}" +
-                   $"\n   Position: {Position}" +
-                   $"\n   Rotation: {Rotation}°";
+                   $"\n   Position: {Position}";
         }
     }
 }

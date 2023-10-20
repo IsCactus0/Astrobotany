@@ -8,10 +8,11 @@ namespace AstrobotanyLibrary.Classes.Objects
         protected PhysicsObject()
         {
             Velocity = Vector2.Zero;
-            RotationalVelocity = 0f;
             Acceleration = Vector2.Zero;
-            RotationalAcceloration = 0f;
             Force = Vector2.Zero;
+            Rotation = 0f;
+            RotationalVelocity = 0f;
+            RotationalAcceloration = 0f;
             RotationalForce = 0f;
             Mass = 1f;
             Friction = 0.5f;
@@ -19,10 +20,11 @@ namespace AstrobotanyLibrary.Classes.Objects
         protected PhysicsObject(PhysicsObject copy)
         {
             Velocity = copy.Velocity;
-            RotationalVelocity = copy.RotationalVelocity;
             Acceleration = copy.Acceleration;
-            RotationalAcceloration = copy.RotationalAcceloration;
             Force = copy.Force;
+            Rotation = copy.Rotation;
+            RotationalVelocity = copy.RotationalVelocity;
+            RotationalAcceloration = copy.RotationalAcceloration;
             RotationalForce = copy.RotationalForce;
             Mass = copy.Mass;
             Friction = copy.Friction;
@@ -32,6 +34,7 @@ namespace AstrobotanyLibrary.Classes.Objects
         public Vector2 Acceleration { get; set; }
         public Vector2 Force { get; set; }
         public Vector2 LastPosition { get; protected set; }
+        public float Rotation { get; set; }
         public float RotationalVelocity { get; set; }
         public float RotationalAcceloration { get; set; }
         public float RotationalForce { get; set; }
@@ -41,8 +44,7 @@ namespace AstrobotanyLibrary.Classes.Objects
         public virtual List<GameObject> FindCollisions()
         {
             Rectangle hitbox = Hitbox;
-            List<GameObject> colliding = Main.DecorationManager.FindAllInBounds(hitbox)
-                                 .Concat(Main.EntityManager.FindAllInBounds(hitbox)).ToList();
+            List<GameObject> colliding = Main.EntityManager.FindAllInBounds(hitbox);
 
             colliding.Remove(this);
             return colliding;
@@ -79,6 +81,7 @@ namespace AstrobotanyLibrary.Classes.Objects
             Acceleration = Vector2.Zero;
             Force = Vector2.Zero;
 
+            Rotation = 0f;
             RotationalVelocity = 0f;
             RotationalAcceloration = 0f;
             RotationalForce = 0f;
@@ -112,12 +115,13 @@ namespace AstrobotanyLibrary.Classes.Objects
         public override string ToString()
         {
             string baseString = base.ToString();
-            baseString.Replace(GetType().BaseType.Name, GetType().Name);
+            baseString = baseString.Replace(GetType().BaseType.Name, GetType().Name);
 
             return baseString +
                    $"\n   Velocity: {Velocity}" +
                    $"\n   Acceleration: {Acceleration}" +
                    $"\n   Force: {Force}" +
+                   $"\n   Rotation: {Rotation}°" +
                    $"\n   Rotational Velocity: {RotationalVelocity}" +
                    $"\n   Rotational Acceloration: {RotationalAcceloration}" +
                    $"\n   Rotational Force: {RotationalForce}" +

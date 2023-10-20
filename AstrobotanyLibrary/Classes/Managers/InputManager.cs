@@ -105,7 +105,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             base.Update(gameTime);
         }
-        
+
         public bool MousePressed(MouseButton button = MouseButton.Left)
         {
             switch (button)

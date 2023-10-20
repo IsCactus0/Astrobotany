@@ -1,4 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
+using AstrobotanyLibrary.Classes.Objects;
 using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -23,6 +24,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         private ContentManager Content { get; set; }
         private GraphicsDevice Graphics { get; set; }
         public string AssetPath { get; private set; }
+        public Texture2D Atlas { get; private set; }
         public Dictionary<string, Texture2D> Textures { get; private set; }
         public Dictionary<string, Effect> Effects { get; private set; }
         public Dictionary<string, FontFamily> Fonts { get; private set; }

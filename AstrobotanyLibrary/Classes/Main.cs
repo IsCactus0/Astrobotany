@@ -13,8 +13,7 @@ namespace AstrobotanyLibrary.Classes
         
         public static AssetManager AssetManager { get; private set; }
         public static InputManager InputManager { get; private set; }
-        public static WorldManager WorldManager { get; private set; }
-        public static PropManager DecorationManager { get; private set; }
+        public static SceneManager SceneManager { get; private set; }
         public static EntityManager EntityManager { get; private set; }
         public static ParticleManager ParticleManager { get; private set; }
         public static InterfaceManager InterfaceManager { get; private set; }
@@ -40,22 +39,22 @@ namespace AstrobotanyLibrary.Classes
         {
             OpenSimplexNoise = new OpenSimplexNoise();
             Random = new Random();
-            Camera = new Camera();
+            Camera = new Camera(); 
 
             Settings = new Settings();
             Settings.LoadSettings();
 
+            Camera.Scale = 6f;
+
             AssetManager = new AssetManager(this);
             InputManager = new InputManager(this);
-            WorldManager = new WorldManager(this);
-            DecorationManager = new PropManager(this);
+            SceneManager = new SceneManager(this);
             EntityManager = new EntityManager(this);
             ParticleManager = new ParticleManager(this);
             InterfaceManager = new InterfaceManager(this);
 
             Components.Add(InputManager);
-            Components.Add(WorldManager);
-            Components.Add(DecorationManager);
+            Components.Add(SceneManager);
             Components.Add(EntityManager);
             Components.Add(ParticleManager);
             Components.Add(InterfaceManager);
@@ -66,7 +65,7 @@ namespace AstrobotanyLibrary.Classes
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            BackgroundColour = new Color(60, 70, 80);
+            BackgroundColour = new Color(53, 53, 53);
             ActiveEffect = null;
             GameSpeed = 1f;
         }
@@ -106,7 +105,6 @@ namespace AstrobotanyLibrary.Classes
 
             SpriteBatch.End();
         }
-        
         public static void SaveQuit(object sender, EventArgs e)
         {
             Quit(sender, e);
