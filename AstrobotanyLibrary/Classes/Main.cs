@@ -3,6 +3,7 @@ using AstrobotanyLibrary.Classes.Objects;
 using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace AstrobotanyLibrary.Classes
 {
@@ -13,8 +14,8 @@ namespace AstrobotanyLibrary.Classes
         
         public static AssetManager AssetManager { get; private set; }
         public static InputManager InputManager { get; private set; }
-        public static SceneManager SceneManager { get; private set; }
         public static EntityManager EntityManager { get; private set; }
+        public static SceneManager SceneManager { get; private set; }
         public static ParticleManager ParticleManager { get; private set; }
         public static InterfaceManager InterfaceManager { get; private set; }
 
@@ -48,14 +49,14 @@ namespace AstrobotanyLibrary.Classes
 
             AssetManager = new AssetManager(this);
             InputManager = new InputManager(this);
-            SceneManager = new SceneManager(this);
             EntityManager = new EntityManager(this);
+            SceneManager = new SceneManager(this);
             ParticleManager = new ParticleManager(this);
             InterfaceManager = new InterfaceManager(this);
 
             Components.Add(InputManager);
-            Components.Add(SceneManager);
             Components.Add(EntityManager);
+            Components.Add(SceneManager);
             Components.Add(ParticleManager);
             Components.Add(InterfaceManager);
 
@@ -94,7 +95,7 @@ namespace AstrobotanyLibrary.Classes
                 DepthStencilState.None,
                 RasterizerState.CullNone,
                 ActiveEffect);
-            
+
             SpriteBatch.Draw(
                 RenderTarget,
                 new Rectangle(

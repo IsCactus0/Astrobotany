@@ -1,7 +1,8 @@
-﻿using AstrobotanyLibrary.Classes.Objects.Windows;
+﻿using AstrobotanyLibrary.Classes.Objects.Items;
+using AstrobotanyLibrary.Classes.Objects.Windows;
+using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Xml.Linq;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
@@ -14,9 +15,13 @@ namespace AstrobotanyLibrary.Classes.Managers
             Windows = new List<Window>();
             CursorSize = 8f;
             InterfaceScale = 0.2f;
+
+            Windows.Add(new ContainerWindow(Main.EntityManager.Player.Inventory));
+            ((ContainerWindow)Windows[0]).Inventory.AddItem(new ItemStack(Items.Capacitor));
+            ((ContainerWindow)Windows[0]).Inventory.AddItem(new ItemStack(Items.Battery));
         }
 
-        public static SpriteBatch SpriteBatch { get; private set; }
+        public SpriteBatch SpriteBatch { get; private set; }
         public Effect ActiveEffect { get; set; }
         public List<Window> Windows { get; private set; }
         public ContainerWindow InventoryWindow { get; private set; }
@@ -27,6 +32,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         public float LastFPS { get; private set; }
 
         public const float FPSFreq = 0.5f;
+        public string DebugString = "";
 
         public override void Update(GameTime gameTime)
         {
@@ -60,7 +66,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         {
             SpriteBatch.Begin(
                 SpriteSortMode.Deferred,
-                BlendState.AlphaBlend,
+                BlendState.Additive,
                 Main.Camera.SamplerState,
                 DepthStencilState.None,
                 RasterizerState.CullNone,
@@ -70,33 +76,16 @@ namespace AstrobotanyLibrary.Classes.Managers
                 if (window.Visible)
                     window.Draw(SpriteBatch);
 
+            SpriteBatch.DrawString(
+                Main.AssetManager.GetFont("Montserrat"),
+                $"FPS {FPS}\nOffset [{Main.Camera.Offset}]\n\n{DebugString}",
+                new Vector2(48, 48) * Main.InterfaceManager.InterfaceScale,
+                Color.White, 0f, Vector2.Zero, Main.InterfaceManager.InterfaceScale, SpriteEffects.None, 0f);
+
             SpriteBatch.Draw(
-                Main.AssetManager.GetTexture("circle"),
-                new Rectangle(
-                    Main.InputManager.MouseScreenPositionP() - new Point((int)(CursorSize / 2f)),
-                    new Point((int)CursorSize)),
+                Main.AssetManager.GetTexture("circle"), 
+                MathAdditions.CenterRect(Main.InputManager.MouseScreenPosition(), (int)CursorSize),
                 Color.White);
-
-            SpriteBatch.DrawString(
-                Main.AssetManager.GetFont("Montserrat"),
-                $"FPS {FPS}",
-                new Vector2(48, 24) * InterfaceScale,
-                Color.White, 0f, Vector2.Zero,
-                InterfaceScale, SpriteEffects.None, 0f);
-
-            SpriteBatch.DrawString(
-                Main.AssetManager.GetFont("Montserrat"),
-                $"Offset [{Main.Camera.Offset}]",
-                new Vector2(48, 128) * InterfaceScale,
-                Color.White, 0f, Vector2.Zero,
-                InterfaceScale, SpriteEffects.None, 0f);
-
-            SpriteBatch.DrawString(
-                Main.AssetManager.GetFont("Montserrat"),
-                $"Zoom {Main.Camera.Scale}",
-                new Vector2(48, 232) * InterfaceScale,
-                Color.White, 0f, Vector2.Zero,
-                InterfaceScale, SpriteEffects.None, 0f);
 
             SpriteBatch.End();
 

@@ -19,7 +19,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         public Scene Scene { get; set; }
         public Effect ActiveEffect { get; set; }
         public Tile SelectedTile { get; private set; }
-        
+
         public void LoadScene(Scene Scene)
         {
             this.Scene = Scene;
@@ -28,22 +28,16 @@ namespace AstrobotanyLibrary.Classes.Managers
             Main.Camera.Offset = new Vector2(8, (Math.Max(Scene.Width, Scene.Height) + 1) * 4);
         }
         public override void Update(GameTime gameTime)
-        {            
-            if (Main.InputManager.MousePressed(Enums.MouseButton.Left))
+        {
+            if (Main.InputManager.MouseFirstPressed(Enums.MouseButton.Right))
             {
-                Vector2 hover = MathAdditions.CartesionToIsometric(
-                    Main.InputManager.MouseWorldPosition(Main.Camera), 16, 8);
-                Vector3 index = Scene.SelectProp(hover);
-                if (index != Vector3.Down)
-                    Scene.Tiles[(int)index.X, (int)index.Y, (int)index.Z] = null;
-            }
-            else if (Main.InputManager.MousePressed(Enums.MouseButton.Right))
-            {
-                Vector2 hover = MathAdditions.CartesionToIsometric(
-                    Main.InputManager.MouseWorldPosition(Main.Camera), 16, 8);
-                Vector3 index = Scene.SelectProp(hover);
-                if (index != Vector3.Down)
-                    Scene.Tiles[(int)index.X, (int)index.Y, (int)index.Z] = new Tile((int)index.X, (int)index.Y);
+                Point? index = Scene.CartesionToGrid(
+                    MathAdditions.CartesionToIsometric(
+                        Main.InputManager.MouseWorldPosition(Main.Camera), 16, 8));
+
+                if (index is not null)
+                    Main.EntityManager.Player.Path.Steps = Scene.Grid.Evaluate(
+                        Main.EntityManager.Player.Position.ToPoint(), (Point)index);
             }
 
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;

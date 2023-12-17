@@ -12,10 +12,12 @@ namespace AstrobotanyLibrary.Classes.Managers
         {
             SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             Entities = new List<Entity>();
+            Player = new Player();
         }
 
         public SpriteBatch SpriteBatch { get; private set; }
         public List<Entity> Entities { get; set; }
+        public Player Player { get; set; }
         public QuadTree QuadTree { get; private set; }
 
         public override void Update(GameTime gameTime)
@@ -35,6 +37,9 @@ namespace AstrobotanyLibrary.Classes.Managers
                     QuadTree.Add(entity);
                 }
             }
+
+            Player.Update(delta);
+            QuadTree.Add(Player);
         }
         public override void Draw(GameTime gameTime)
         {
@@ -49,6 +54,8 @@ namespace AstrobotanyLibrary.Classes.Managers
             foreach (Entity entity in Entities)
                 if (Main.Camera.BoundingBox.Intersects(entity.Sprite))
                     entity.Draw(SpriteBatch);
+
+            Player.Draw(SpriteBatch);
 
             base.Draw(gameTime);
 

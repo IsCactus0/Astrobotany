@@ -75,19 +75,6 @@ namespace AstrobotanyLibrary.Classes.Objects
                 } 
             }
         }
-        public override void Reset()
-        {
-            Velocity = Vector2.Zero;
-            Acceleration = Vector2.Zero;
-            Force = Vector2.Zero;
-
-            Rotation = 0f;
-            RotationalVelocity = 0f;
-            RotationalAcceloration = 0f;
-            RotationalForce = 0f;
-
-            base.Reset();
-        }
         public override void Update(float delta)
         {
             LastPosition = Position;
@@ -111,6 +98,19 @@ namespace AstrobotanyLibrary.Classes.Objects
             Force = Vector2.Zero;
 
             ProcessCollisions(delta);
+        }
+        public override void Reset()
+        {
+            Velocity = Vector2.Zero;
+            Acceleration = Vector2.Zero;
+            Force = Vector2.Zero;
+
+            Rotation = 0f;
+            RotationalVelocity = 0f;
+            RotationalAcceloration = 0f;
+            RotationalForce = 0f;
+
+            base.Reset();
         }
         public override string ToString()
         {

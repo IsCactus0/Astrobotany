@@ -11,9 +11,18 @@
                 "electric field by virtue of" +
                 "accumulating electric charges" +
                 "on two close surfaces insulated" +
-                "from each other",
+                "from each other.",
             Category = Enums.ItemCategory.Component,
             Value = 12
+        };
+
+        public static Item Battery = new Item()
+        {
+            Name = "Battery",
+            Description =
+                "A simple battery.",
+            Category = Enums.ItemCategory.Component,
+            Value = 6
         };
     }
 }

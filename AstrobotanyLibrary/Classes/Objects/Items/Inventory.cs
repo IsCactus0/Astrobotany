@@ -6,19 +6,32 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
     {
         public Inventory()
         {
+            Name = "";
             Items = new ItemStack[1, 1];
         }
         public Inventory(int size)
         {
+            Name = "";
             Items = new ItemStack[size, size];
         }
         public Inventory(int width, int height)
         {
+            Name = "";
+            Items = new ItemStack[width, height];
+        }
+        public Inventory(int width, int height, string name)
+        {
+            Name = name;
             Items = new ItemStack[width, height];
         }
 
+        public string Name { get; set; }
         public ItemStack[,] Items { get; set; }
     
+        public void Clear()
+        {
+            Array.Clear(Items, 0, Items.Length);
+        }
         public bool AddItem(ItemStack itemStack)
         {
             for (int y = 0; y < Items.GetLength(1); y++)
@@ -76,6 +89,23 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
                 default:
                     return false;
             }
+        }
+        public override string ToString()
+        {
+            string baseString = base.ToString();
+            baseString = baseString.Replace(GetType().BaseType.Name, GetType().Name);
+
+            string items = "";
+            int width = Items.GetLength(0);
+            int height = Items.GetLength(1);
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                    items += $"\n      {Items[x, y].Item}";
+
+            return baseString +
+                   $"\n   Name: {Name}" +
+                   $"\n   Size: {Items.GetLength(0)} x {Items.GetLength(1)}" +
+                   $"\n   Items: {items}";
         }
     }
 }

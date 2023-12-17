@@ -15,6 +15,7 @@ namespace AstrobotanyLibrary.Classes.Objects
             Offset = Vector2.Zero;
             Viewport = new Viewport();
             SamplerState = SamplerState.PointClamp;
+            ScreenShake = 0f;
         }
 
         public float Scale { get; set; }
@@ -64,14 +65,22 @@ namespace AstrobotanyLibrary.Classes.Objects
                     (int)((Viewport.Height * (1f / Scale)) + PhysicsDistance * 2f));
             }
         }
+        public float ScreenShake { get; set; }
 
-        public void Update(float delta, float strength)
-        {
-            Position = Vector2.Lerp(Position, Offset, delta * strength);
-        }
         public void Update(float delta, float strength, Vector2 target)
         {
-            Position = Vector2.Lerp(Position, Offset + target, delta * strength);
+            Vector2 shake = Vector2.Zero;
+            if (Main.Settings.ScreenShake)
+            {
+                ScreenShake -= delta;
+                if (ScreenShake < 0f)
+                    ScreenShake = 0f;
+
+                shake = MathAdditions.RandomVector((float)Main.OpenSimplexNoise.Evaluate(ScreenShake / 1000f, 0f)) * 100f;
+                shake.X *= 3f;
+            }
+
+            Position = Vector2.Lerp(Position, Offset + target + shake, delta * strength);
         }
         public bool WithinBounds(Vector2 position)
         {

@@ -49,11 +49,27 @@ namespace AstrobotanyLibrary.Classes.Utility
                 (int)Math.Floor(vector.X),
                 (int)Math.Floor(vector.Y));
         }
+        public static Rectangle CenterRect(Vector2 position, int size)
+        {
+            return new Rectangle(
+                (int)(position.X - size / 2f),
+                (int)(position.Y - size / 2f),
+                (int)size,
+                (int)size);
+        }
+        public static Rectangle CenterRect(Vector2 position, Vector2 size)
+        {
+            return new Rectangle(
+                (int)(position.X - size.X / 2f),
+                (int)(position.Y - size.Y / 2f),
+                (int)size.X,
+                (int)size.Y);
+        }
         public static float Map(float value, float min1, float max1, float min2, float max2)
         {
             return (value - min1) / (max1 - min1) * (max2 - min2) + min2;
         }
-        
+
         public static Vector2 RandomVector()
         {
             return RandomVector(1f);

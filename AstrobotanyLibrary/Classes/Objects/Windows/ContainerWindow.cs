@@ -11,41 +11,40 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
             : base()
         {
             Inventory = new Inventory();
-            ItemWindow = new ItemWindow(null);
+        }
+        public ContainerWindow(Inventory inventory)
+            : base()
+        {
+            Inventory = inventory;
         }
         public ContainerWindow(string title)
             : base(title)
         {
             Inventory = new Inventory();
-            ItemWindow = new ItemWindow(null);
         }
         public ContainerWindow(string title, Color backgroundColour)
             : base(title, backgroundColour)
         {
             Inventory = new Inventory();
-            ItemWindow = new ItemWindow(null);
         }
         public ContainerWindow(string title, Color backgroundColour, Vector2 position)
             : base(title, backgroundColour, position)
         {
             Inventory = new Inventory();
-            ItemWindow = new ItemWindow(null);
         }
         public ContainerWindow(string title, Color backgroundColour, Vector2 position, int inventorySize)
             : base(title, backgroundColour, position)
         {
             Inventory = new Inventory(inventorySize);
-            ItemWindow = new ItemWindow(null);
         }
         public ContainerWindow(string title, Color backgroundColour, Vector2 position, int inventoryWidth, int inventoryHeight)
             : base(title, backgroundColour, position)
         {
             Inventory = new Inventory(inventoryWidth, inventoryHeight);
-            ItemWindow = new ItemWindow(null);
         }
 
         public Inventory Inventory { get; set; }
-        public ItemWindow ItemWindow { get; set; }
+        public ItemStack Hovering { get; protected set; }
         public Rectangle ItemRectangle
         {
             get
@@ -73,13 +72,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
             itemIndex.Floor();
 
             Point indexP = itemIndex.ToPoint();
-            ItemStack itemStack = Inventory.Items[indexP.X, indexP.Y];
-
-            if (itemStack is not null)
-            {
-                ItemWindow.Visible = true;
-                ItemWindow.Item  = itemStack.Item;
-            }
+            Hovering = Inventory.Items[indexP.X, indexP.Y];
 
             base.Update(delta);
         }
@@ -88,15 +81,15 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
             base.Draw(spriteBatch);
 
             for (int x = 0; x < Inventory.Items.GetLength(0); x++)
+            {
                 for (int y = 0; y < Inventory.Items.GetLength(1); y++)
                 {
-                    Drawing.DrawRectangle(
-                        spriteBatch,
+                    Drawing.DrawRectangle(spriteBatch,
                         new Rectangle(
                             (int)Position.X + 12 + x * 51,
                             (int)Position.Y + 70 + y * 51,
                             48, 48),
-                        new Color(28, 28, 28, 204));
+                        BackgroundColour);
 
                     if (Inventory.Items[x, y] is not null)
                         spriteBatch.Draw(
@@ -104,14 +97,20 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
                             new Rectangle(
                                 (int)Position.X + 12 + x * 51,
                                 (int)Position.Y + 70 + y * 51, 48, 48),
-                            Color.White * 0.8f);
+                            Color.White);
                 }
+            }
 
-            ItemWindow.Draw(spriteBatch);
+            if (Hovering is not null)
+                spriteBatch.Draw(
+                    Main.AssetManager.GetTexture($"Items/{Hovering.Item.Name}"),
+                    new Rectangle(
+                        (int)Position.X + 12 + 0 * 51,
+                        (int)Position.Y + 70 + 0 * 51, 48, 48),
+                    Color.White * 0.8f);
         }
         public override void Remove()
         {
-            ItemWindow.Remove();
             base.Remove();
         }
         public override Rectangle CalculateSize()

@@ -1,5 +1,6 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
 using AstrobotanyLibrary.Classes.Objects;
+using AstrobotanyLibrary.Classes.Objects.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -106,6 +107,24 @@ namespace AstrobotanyLibrary.Classes.Managers
             base.Update(gameTime);
         }
 
+        public MouseButton GetMouseButton()
+        {
+            if (MouseState.LeftButton == ButtonState.Pressed)
+                return MouseButton.Left;
+            else if (MouseState.RightButton == ButtonState.Pressed)
+                return MouseButton.Right;
+            else if (MouseState.MiddleButton == ButtonState.Pressed)
+                return MouseButton.Middle;
+
+            return MouseButton.None;
+        }
+        public bool MouseAnyPressed()
+        {
+            return
+                MouseState.LeftButton == ButtonState.Pressed ||
+                MouseState.RightButton == ButtonState.Pressed ||
+                MouseState.MiddleButton == ButtonState.Pressed;
+        }
         public bool MousePressed(MouseButton button = MouseButton.Left)
         {
             switch (button)

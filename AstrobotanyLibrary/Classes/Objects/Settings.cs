@@ -16,6 +16,7 @@ namespace AstrobotanyLibrary.Classes.Objects
             WindowMode = WindowMode.Windowed;
             VSync = false;
             TargetFPS = 0;
+            ScreenShake = false;
             SavePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Astrobotany/Settings/");
@@ -26,6 +27,7 @@ namespace AstrobotanyLibrary.Classes.Objects
         public bool VSync { get; set; }
         public int TargetFPS { get; set; }
         public int MultiSampleCount { get; set; }
+        public bool ScreenShake { get; set; }
         public string SavePath { get; set; }
 
         public void ApplySettings()

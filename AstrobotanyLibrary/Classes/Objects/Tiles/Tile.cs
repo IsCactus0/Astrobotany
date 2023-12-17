@@ -1,10 +1,10 @@
-﻿using AstrobotanyLibrary.Classes.Managers;
+﻿using AstrobotanyLibrary.Classes.Enums;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Objects.Tiles
 {
-    public class Tile : GameObject
+    public abstract class Tile : GameObject
     {
         public Tile()
             : base()
@@ -21,9 +21,14 @@ namespace AstrobotanyLibrary.Classes.Objects.Tiles
 
         public bool Remove { get; set; }
 
-        public override void Destroy()
+        public virtual void Hover()
         {
-            Remove = true;
+            Main.InterfaceManager.DebugString = $"Tile: {this}";
+        }
+        public virtual void Click(MouseButton button)
+        {
+            if (button == MouseButton.Left)
+                Destroy();
         }
         public override void Update(float delta)
         {
@@ -38,7 +43,15 @@ namespace AstrobotanyLibrary.Classes.Objects.Tiles
                     (int)((sprite.X - sprite.Y) * 16f),
                     (int)((sprite.X + sprite.Y) * 8f),
                     sprite.Width, sprite.Height),
-                Main.SceneManager.SelectedTile == this ? Color.Red : Color.White);
+                Color.White);
+        }
+        public override void Destroy()
+        {
+            Remove = true;
+        }
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

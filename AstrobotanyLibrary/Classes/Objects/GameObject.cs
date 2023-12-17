@@ -70,13 +70,13 @@ namespace AstrobotanyLibrary.Classes.Objects
             }
         }
 
-        public abstract void Destroy();
+        public abstract void Update(float delta);
+        public abstract void Draw(SpriteBatch spriteBatch);
         public virtual void Reset()
         {
             Position = Vector2.Zero;
         }
-        public abstract void Update(float delta);
-        public abstract void Draw(SpriteBatch spriteBatch);
+        public abstract void Destroy();
         public override string ToString()
         {
             Rectangle hitbox = Hitbox;

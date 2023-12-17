@@ -35,6 +35,7 @@ namespace AstrobotanyLibrary.Classes.Managers
             Textures.Add("simple", Drawing.Square(Graphics, 1, Color.White));
             Textures.Add("circle", Drawing.Circle(Graphics, 8, Color.White));
             Textures.Add("blur", Drawing.Circle(Graphics, 3, Color.White, FadeType.InverseSquare));
+            Textures.Add("blur2", Drawing.Circle(Graphics, 128, Color.White, FadeType.Linear));
 
             LoadFontFamily("MonomaniacOne");
             LoadFontFamily("Montserrat");
