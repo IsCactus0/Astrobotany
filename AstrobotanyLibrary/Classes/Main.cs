@@ -15,7 +15,7 @@ namespace AstrobotanyLibrary.Classes
         public static AssetManager AssetManager { get; private set; }
         public static InputManager InputManager { get; private set; }
         public static EntityManager EntityManager { get; private set; }
-        public static SceneManager SceneManager { get; private set; }
+        public static TileManager SceneManager { get; private set; }
         public static ParticleManager ParticleManager { get; private set; }
         public static InterfaceManager InterfaceManager { get; private set; }
 
@@ -50,7 +50,7 @@ namespace AstrobotanyLibrary.Classes
             AssetManager = new AssetManager(this);
             InputManager = new InputManager(this);
             EntityManager = new EntityManager(this);
-            SceneManager = new SceneManager(this);
+            SceneManager = new TileManager(this);
             ParticleManager = new ParticleManager(this);
             InterfaceManager = new InterfaceManager(this);
 
@@ -83,8 +83,19 @@ namespace AstrobotanyLibrary.Classes
         {
             GraphicsDevice.SetRenderTarget(RenderTarget);
             GraphicsDevice.Clear(BackgroundColour);
+            SpriteBatch.Begin(
+                SpriteSortMode.FrontToBack,
+                BlendState.AlphaBlend,
+                SamplerState.PointClamp,
+                DepthStencilState.Default,
+                RasterizerState.CullNone,
+                ActiveEffect,
+                Camera.Transform);
 
-            base.Draw(gameTime);
+            SceneManager.Draw(gameTime);
+            EntityManager.Draw(gameTime);
+
+            SpriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.Clear(Color.Black);
@@ -103,6 +114,7 @@ namespace AstrobotanyLibrary.Classes
                     Graphics.PreferredBackBufferWidth,
                     Graphics.PreferredBackBufferHeight),
                 Color.White);
+            InterfaceManager.Draw(gameTime);
 
             SpriteBatch.End();
         }

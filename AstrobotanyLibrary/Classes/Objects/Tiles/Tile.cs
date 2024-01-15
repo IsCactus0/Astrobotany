@@ -1,4 +1,6 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
+using AstrobotanyLibrary.Classes.Managers;
+using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -37,13 +39,19 @@ namespace AstrobotanyLibrary.Classes.Objects.Tiles
         public override void Draw(SpriteBatch spriteBatch)
         {
             Rectangle sprite = Sprite;
+            Texture2D texture = Main.AssetManager.GetTexture(Name);
             spriteBatch.Draw(
-                Main.AssetManager.GetTexture(Name),
+                texture,
                 new Rectangle(
                     (int)((sprite.X - sprite.Y) * 16f),
                     (int)((sprite.X + sprite.Y) * 8f),
                     sprite.Width, sprite.Height),
-                Color.White);
+                texture.Bounds,
+                Color.White,
+                0f,
+                Vector2.Zero,
+                SpriteEffects.None,
+                MathAdditions.LayerDepth(sprite.Location, Main.SceneManager.Scene.MaxLayerDepth));
         }
         public override void Destroy()
         {

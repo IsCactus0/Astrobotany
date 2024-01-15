@@ -11,17 +11,14 @@ namespace AstrobotanyLibrary.Classes.Managers
         public InterfaceManager(Game game)
                     : base(game)
         {
-            SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             Windows = new List<Window>();
             CursorSize = 8f;
-            InterfaceScale = 0.2f;
-
-            Windows.Add(new ContainerWindow(Main.EntityManager.Player.Inventory));
+            InterfaceScale = 1f;
+            Windows.Add(new ContainerWindow(Main.EntityManager.Player.Inventory, "Inventory", Color.Black));
             ((ContainerWindow)Windows[0]).Inventory.AddItem(new ItemStack(Items.Capacitor));
             ((ContainerWindow)Windows[0]).Inventory.AddItem(new ItemStack(Items.Battery));
         }
 
-        public SpriteBatch SpriteBatch { get; private set; }
         public Effect ActiveEffect { get; set; }
         public List<Window> Windows { get; private set; }
         public ContainerWindow InventoryWindow { get; private set; }
@@ -31,7 +28,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         public int FPS { get; private set; }
         public float LastFPS { get; private set; }
 
-        public const float FPSFreq = 0.5f;
+        public const float FPSFreq = 0.7f;
         public string DebugString = "";
 
         public override void Update(GameTime gameTime)
@@ -64,30 +61,23 @@ namespace AstrobotanyLibrary.Classes.Managers
         }
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin(
-                SpriteSortMode.Deferred,
-                BlendState.Additive,
-                Main.Camera.SamplerState,
-                DepthStencilState.None,
-                RasterizerState.CullNone,
-                ActiveEffect, null);
-
             foreach (Window window in Windows)
                 if (window.Visible)
-                    window.Draw(SpriteBatch);
+                    window.Draw(Main.SpriteBatch);
 
-            SpriteBatch.DrawString(
+            Drawing.DrawString(
+                Main.SpriteBatch,
                 Main.AssetManager.GetFont("Montserrat"),
-                $"FPS {FPS}\nOffset [{Main.Camera.Offset}]\n\n{DebugString}",
-                new Vector2(48, 48) * Main.InterfaceManager.InterfaceScale,
-                Color.White, 0f, Vector2.Zero, Main.InterfaceManager.InterfaceScale, SpriteEffects.None, 0f);
+                $"FPS {FPS}",
+                new Vector2(10),
+                Color.White,
+                Enums.Alignment.TopLeft,
+                Main.InterfaceManager.InterfaceScale);
 
-            SpriteBatch.Draw(
+            Main.SpriteBatch.Draw(
                 Main.AssetManager.GetTexture("circle"), 
                 MathAdditions.CenterRect(Main.InputManager.MouseScreenPosition(), (int)CursorSize),
                 Color.White);
-
-            SpriteBatch.End();
 
             base.Draw(gameTime);
         }

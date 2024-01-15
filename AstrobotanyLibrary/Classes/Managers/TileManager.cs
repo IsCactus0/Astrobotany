@@ -2,22 +2,18 @@
 using AstrobotanyLibrary.Classes.Objects.Tiles;
 using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
-    public class SceneManager : DrawableGameComponent
+    public class TileManager : DrawableGameComponent
     {
-        public SceneManager(Game game)
+        public TileManager(Game game)
             : base(game)
         {
-            SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             LoadScene(new Scene());
         }
 
-        public static SpriteBatch SpriteBatch { get; private set; }
         public Scene Scene { get; set; }
-        public Effect ActiveEffect { get; set; }
         public Tile SelectedTile { get; private set; }
 
         public void LoadScene(Scene Scene)
@@ -46,18 +42,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         }
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin(
-                SpriteSortMode.Deferred,
-                BlendState.AlphaBlend,
-                Main.Camera.SamplerState,
-                DepthStencilState.None,
-                RasterizerState.CullNone,
-                ActiveEffect, 
-                Main.Camera.Transform);
-
-            Scene.Draw(SpriteBatch);
-
-            SpriteBatch.End();
+            Scene.Draw(Main.SpriteBatch);
         }
     }
 }

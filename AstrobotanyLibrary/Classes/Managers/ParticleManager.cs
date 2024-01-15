@@ -11,12 +11,10 @@ namespace AstrobotanyLibrary.Classes.Managers
         public ParticleManager(Game game)
             : base(game)
         {
-            SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             Particles = new List<Particle>();
             MaxParticles = 1000;
         }
 
-        public SpriteBatch SpriteBatch { get; private set; }
         public Effect ActiveEffect { get; set; }
         public List<Particle> Particles { get; private set; }
         public QuadTree QuadTree { get; private set; }
@@ -46,21 +44,11 @@ namespace AstrobotanyLibrary.Classes.Managers
         }
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin(
-                SpriteSortMode.Deferred,
-                BlendState.AlphaBlend,
-                Main.Camera.SamplerState,
-                DepthStencilState.None,
-                RasterizerState.CullNone,
-                ActiveEffect, Main.Camera.Transform);
-
             foreach (Particle particle in Particles)
                 if (MathAdditions.VectorIntersects(particle.Position, Main.Camera.BoundingBox))
-                    particle.Draw(SpriteBatch);
+                    particle.Draw(Main.SpriteBatch);
 
             base.Draw(gameTime);
-
-            SpriteBatch.End();
         }
         public List<GameObject> FindAllInRange(Vector2 position, float range)
         {

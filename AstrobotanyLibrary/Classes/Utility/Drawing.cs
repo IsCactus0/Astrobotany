@@ -1,6 +1,9 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
+using AstrobotanyLibrary.Classes.Objects;
+using AstrobotanyLibrary.Classes.Objects.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace AstrobotanyLibrary.Classes.Utility
 {
@@ -106,42 +109,87 @@ namespace AstrobotanyLibrary.Classes.Utility
             return rectangle;
         }
 
-        public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, Color colour)
+        public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangle, Color colour, float scale = 1f)
         {
             spriteBatch.Draw(
                 Main.AssetManager.GetTexture("simple"),
-                rectangle,
-                colour);
+                new Rectangle(rectangle.X, rectangle.Y, (int)(rectangle.Width * scale), (int)(rectangle.Height * scale)),
+                null, colour, 0f, Vector2.Zero, SpriteEffects.None,
+                0f);
         }
-        public static void DrawLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, float thickness, Color colour)
+        public static void DrawLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, float thickness, Color colour, float scale = 1f)
         {
             float distance = Vector2.Distance(start, end);
             float angle = MathF.Atan2(end.Y - start.Y, end.X - start.X);
             Vector2 origin = new Vector2(0f, 0.5f);
-            Vector2 scale = new Vector2(distance, thickness);
+            Vector2 length = new Vector2(distance, thickness);
 
             spriteBatch.Draw(
                 Main.AssetManager.GetTexture("simple"),
                 start, null, colour,
-                angle, origin, scale,
+                angle, origin, length * scale,
                 SpriteEffects.None, 0);
         }
-        public static void DrawPoint(SpriteBatch spriteBatch, Vector2 position, float radius, Color colour)
+        public static void DrawPoint(SpriteBatch spriteBatch, Vector2 position, float radius, Color colour, float scale = 1f)
         {
             spriteBatch.Draw(
-                Main.AssetManager.GetTexture("circle"), 
+                Main.AssetManager.GetTexture("circle"),
                 new Rectangle(
                     (int)(position.X - radius),
                     (int)(position.Y - radius),
                     (int)(radius * 2),
                     (int)(radius * 2)),
+                null, 
                 colour);
         }
-        public static void DrawRoundedLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, float thickness, Color colour)
+        public static void DrawRoundedLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, float thickness, Color colour, float scale = 1f)
         {
-            DrawLine(spriteBatch, start, end, thickness, colour);
-            DrawPoint(spriteBatch, start, thickness / 2f, colour);
-            DrawPoint(spriteBatch, end, thickness / 2f, colour);
+            Vector2 offset = new Vector2(thickness / 2f, 0f);
+            start += offset;
+            end -= offset;
+            DrawLine(spriteBatch, start, end, thickness, colour, scale);
+            DrawPoint(spriteBatch, start, thickness / 2f, colour, scale);
+            DrawPoint(spriteBatch, end, thickness / 2f, colour, scale);
+        }
+        public static void DrawString(SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 position, Color colour, Alignment alignment, float scale = 1f)
+        {
+            Vector2 origin;
+            Vector2 size = font.MeasureString(text) * scale;
+
+            switch (alignment)
+            {
+                case Alignment.Top:
+                    origin = new Vector2(size.X / 2f, 0f);
+                    break;
+                case Alignment.TopLeft:
+                    origin = new Vector2(0f, 0f);
+                    break;
+                case Alignment.TopRight:
+                    origin = new Vector2(size.X, 0f);
+                    break;
+                case Alignment.Bottom:
+                    origin = new Vector2(size.X / 2f, size.Y);
+                    break;
+                case Alignment.BottomLeft:
+                    origin = new Vector2(0f, size.Y);
+                    break;
+                case Alignment.BottomRight:
+                    origin = new Vector2(size.X, size.Y);
+                    break;
+                case Alignment.Left:
+                    origin = new Vector2(0f, size.Y / 2f);
+                    break;
+                case Alignment.Right:
+                    origin = new Vector2(size.X, size.Y / 2f);
+                    break;
+                default:
+                    origin = new Vector2(size.X / 2f, size.Y / 2f);
+                    break;
+            }
+
+            origin *= scale;
+
+            spriteBatch.DrawString(font, text, position - origin, colour, 0f, origin, scale, SpriteEffects.None, 0f);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AstrobotanyLibrary.Classes.Objects;
 using AstrobotanyLibrary.Classes.Objects.Entities;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Managers
 {
@@ -10,12 +9,10 @@ namespace AstrobotanyLibrary.Classes.Managers
         public EntityManager(Game game)
             : base(game)
         {
-            SpriteBatch = new SpriteBatch(game.GraphicsDevice);
             Entities = new List<Entity>();
             Player = new Player();
         }
 
-        public SpriteBatch SpriteBatch { get; private set; }
         public List<Entity> Entities { get; set; }
         public Player Player { get; set; }
         public QuadTree QuadTree { get; private set; }
@@ -28,6 +25,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             QuadTree = new QuadTree(Main.Camera.BoundingBox, 8);
 
+            Player.Update(delta);
             for (int i = Entities.Count - 1; i >= 0; i--)
             {
                 Entity entity = Entities[i];
@@ -38,28 +36,16 @@ namespace AstrobotanyLibrary.Classes.Managers
                 }
             }
 
-            Player.Update(delta);
             QuadTree.Add(Player);
         }
         public override void Draw(GameTime gameTime)
         {
-            SpriteBatch.Begin(
-                SpriteSortMode.Deferred,
-                BlendState.AlphaBlend,
-                Main.Camera.SamplerState,
-                DepthStencilState.None,
-                RasterizerState.CullNone,
-                null, Main.Camera.Transform);
-
+            Player.Draw(Main.SpriteBatch);
             foreach (Entity entity in Entities)
                 if (Main.Camera.BoundingBox.Intersects(entity.Sprite))
-                    entity.Draw(SpriteBatch);
-
-            Player.Draw(SpriteBatch);
+                    entity.Draw(Main.SpriteBatch);
 
             base.Draw(gameTime);
-
-            SpriteBatch.End();
         }
         public List<GameObject> FindAllInRange(Vector2 position, float range)
         {

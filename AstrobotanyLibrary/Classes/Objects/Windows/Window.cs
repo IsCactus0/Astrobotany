@@ -47,8 +47,8 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
             get
             {
                 return new Vector2(
-                    Math.Max(100, Main.AssetManager.GetFont("MonomaniacOne").MeasureString(Title.ToUpper()).X * 0.5f + 24),
-                    Math.Max(100, 58));
+                    Math.Max(20, 100 * Main.InterfaceManager.InterfaceScale),
+                    Math.Max(20, 200 * Main.InterfaceManager.InterfaceScale));
             }
         }
         public Rectangle Rectangle
@@ -63,25 +63,25 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
         {
             Drawing.DrawRectangle(
                 spriteBatch,
-                Rectangle,
-                BackgroundColour * 0.8f);
+                CalculateSize(),
+                Color.Red,
+                Main.InterfaceManager.InterfaceScale);
 
-            spriteBatch.DrawString(
+            Drawing.DrawString(
+                spriteBatch,
                 Main.AssetManager.GetFont("MonomaniacOne"),
                 Title.ToUpper(),
                 Position,
-                Color.White * 0.8f,
-                0f,
-                new Vector2(-32f, 0f),
-                0.5f,
-                SpriteEffects.None,
-                0f);
+                Color.White,
+                Enums.Alignment.BottomLeft,
+                Main.InterfaceManager.InterfaceScale);
 
             Drawing.DrawRoundedLine(
                 spriteBatch,
-                new Vector2(Position.X + 4f, Position.Y),
-                new Vector2(Position.X + Size.X - 4f, Position.Y),
-                8f, Color.White);
+                new Vector2(Position.X, Position.Y),
+                new Vector2(Position.X + Size.X, Position.Y + Size.Y),
+                4f, Color.White,
+                Main.InterfaceManager.InterfaceScale);
         }
         public virtual void Remove()
         {
@@ -89,7 +89,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
         }
         public virtual Rectangle CalculateSize()
         {
-            return new Rectangle(Position.ToPoint(), Size.ToPoint());
+            return new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y);
         }
         public virtual void ToggleVisibility()
         {

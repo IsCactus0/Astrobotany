@@ -17,15 +17,20 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
         {
             Inventory = inventory;
         }
-        public ContainerWindow(string title)
+        public ContainerWindow(Inventory inventory, string title)
             : base(title)
         {
-            Inventory = new Inventory();
+            Inventory = inventory;
         }
-        public ContainerWindow(string title, Color backgroundColour)
+        public ContainerWindow(Inventory inventory, string title, Color backgroundColour)
             : base(title, backgroundColour)
         {
-            Inventory = new Inventory();
+            Inventory = inventory;
+        }
+        public ContainerWindow(Inventory inventory, string title, Color backgroundColour, Vector2 position)
+            : base(title, backgroundColour, position)
+        {
+            Inventory = inventory;
         }
         public ContainerWindow(string title, Color backgroundColour, Vector2 position)
             : base(title, backgroundColour, position)
@@ -61,18 +66,18 @@ namespace AstrobotanyLibrary.Classes.Objects.Windows
 
         public override void Update(float delta)
         {
-            Vector2 mousePos = Main.InputManager.MouseScreenPosition();
-            int index = Main.InterfaceManager.Windows.FindIndex(x => x == this);
-
-            if (!MathAdditions.PointIntersects(mousePos.ToPoint(), ItemRectangle))
-                return;
-
-            Vector2 itemIndex = Main.InputManager.MouseScreenPosition() - Position;
-            itemIndex /= 51.0f;
-            itemIndex.Floor();
-
-            Point indexP = itemIndex.ToPoint();
-            Hovering = Inventory.Items[indexP.X, indexP.Y];
+            // Vector2 mousePos = Main.InputManager.MouseScreenPosition();
+            // int index = Main.InterfaceManager.Windows.FindIndex(x => x == this);
+            // 
+            // if (!MathAdditions.PointIntersects(mousePos.ToPoint(), ItemRectangle))
+            //     return;
+            // 
+            // Vector2 itemIndex = Main.InputManager.MouseScreenPosition() - Position;
+            // itemIndex /= 51.0f;
+            // itemIndex.Floor();
+            // 
+            // Point indexP = itemIndex.ToPoint();
+            // Hovering = Inventory.Items[indexP.X, indexP.Y];
 
             base.Update(delta);
         }

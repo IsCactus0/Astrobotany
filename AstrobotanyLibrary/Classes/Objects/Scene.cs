@@ -28,6 +28,13 @@ namespace AstrobotanyLibrary.Classes.Objects
           
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public int MaxLayerDepth 
+        {
+            get
+            {
+                return Width + Height;
+            }
+        }
         public Tile[,] Tiles { get; private set; }
         public Grid Grid { get; private set; }
         public List<Entity> Entities { get; private set; }
@@ -39,7 +46,6 @@ namespace AstrobotanyLibrary.Classes.Objects
         {
             Main.ParticleManager.Particles.Clear();
             Main.EntityManager.Entities.Clear();
-
             Main.EntityManager.Entities.AddRange(Entities);
         }
         public Point? CartesionToGrid(Vector2 hover)
@@ -63,7 +69,10 @@ namespace AstrobotanyLibrary.Classes.Objects
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Background, Bounds, Color.White);
+            spriteBatch.Draw(
+                Background, Bounds, Background.Bounds,
+                Color.White,
+                0f, Vector2.Zero, SpriteEffects.None, 0);
 
             for (int y = 0; y < Height; y++)
                 for (int x = 0; x < Width; x++)

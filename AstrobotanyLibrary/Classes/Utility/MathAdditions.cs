@@ -120,6 +120,10 @@ namespace AstrobotanyLibrary.Classes.Utility
                 (input.X - input.Y) * (width / 2),
                 (input.X + input.Y) * (height / 2));
         }
+        public static float LayerDepth(Point position, int maxDepth)
+        {
+            return (float)(position.X + position.Y) / maxDepth;
+        }
 
         public static Vector2 Reflect(Vector2 direction, Vector2 normal)
         {
