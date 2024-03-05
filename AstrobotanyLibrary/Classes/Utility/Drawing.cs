@@ -187,9 +187,19 @@ namespace AstrobotanyLibrary.Classes.Utility
                     break;
             }
 
-            origin *= scale;
-
-            spriteBatch.DrawString(font, text, position - origin, colour, 0f, origin, scale, SpriteEffects.None, 0f);
+            origin /= scale;
+            spriteBatch.DrawString(font, text, position, colour, 0f, origin, scale, SpriteEffects.None, 0f);
+        }
+        public static void DrawProgressBar(SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color colour, float thickness = 3f, float value = 0f, float layerDepth = 0f)
+        {
+            Vector2 direction = end - start;
+            DrawRoundedLine(spriteBatch, start, start + direction * value, thickness, colour, layerDepth);
+        }
+        public static void DrawBorderedProgressBar(SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color colour, Color borderColour, float thickness = 3f, float offset = 0f, float value = 0f, float layerDepth = 0f)
+        {
+            if (offset > 0 && value < 1)
+                DrawRoundedLine(spriteBatch, start, end, thickness + offset, borderColour, layerDepth);
+            DrawProgressBar(spriteBatch, start, end, colour, layerDepth + 0.001f);
         }
     }
 }
