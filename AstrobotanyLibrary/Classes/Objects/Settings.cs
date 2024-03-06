@@ -14,38 +14,78 @@ namespace AstrobotanyLibrary.Classes.Objects
         {
             Resolution = new Point(1920, 1080);
             WindowMode = WindowMode.Windowed;
+            Brightness = 1f;
             VSync = false;
             TargetFPS = 0;
-            ScreenShake = false;
+            MultiSampleCount = 8;
+            GameSpeed = true;
+            ScreenShake = true;
+            PauseOnLoseFocus = false;
+            UseSystemCursor = false;
             SavePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Astrobotany/Settings/");
+
+            Main.Self.Activated += (sender, args) => { OnFocus(); };
+            Main.Self.Deactivated += (sender, args) => { OnLoseFocus(); };
         }
 
         public Point Resolution { get; set; }
         public WindowMode WindowMode { get; set; }
+        public float Brightness { get; set; }
         public bool VSync { get; set; }
         public int TargetFPS { get; set; }
         public int MultiSampleCount { get; set; }
+        public bool GameSpeed { get; set; }
         public bool ScreenShake { get; set; }
+        public bool PauseOnLoseFocus { get; set; }
+        public bool UseSystemCursor { get; set; }
         public string SavePath { get; set; }
+        public Rectangle WindowSize
+        {
+            get
+            {
+                if (WindowMode == WindowMode.Borderless)
+                    return new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+                
+                return new Rectangle(0, 0, Main.Graphics.PreferredBackBufferWidth, Main.Graphics.PreferredBackBufferHeight);
+            }
+        }
 
         public void ApplySettings()
         {
             SetResolution();
             SetWindowMode();
             SetFramerate();
+
+            Main.Self.IsMouseVisible = UseSystemCursor;
+
             Main.Graphics.ApplyChanges();
         }
         public void SetResolution()
         {
-            Main.RenderTarget = new RenderTarget2D(Main.Graphics.GraphicsDevice, Resolution.X, Resolution.Y);
-            Main.Graphics.GraphicsDevice.Clear(Color.Transparent);
-            Main.Graphics.PreferredBackBufferWidth = Resolution.X;
-            Main.Graphics.PreferredBackBufferHeight = Resolution.Y;
+            Point resolution = Resolution;
 
-            Main.Camera.Viewport = new Viewport(Resolution.X / 2, Resolution.Y / 2, Resolution.X, Resolution.Y);
-            Main.Camera.Scale = 1f;
+            Main.RenderTarget = new RenderTarget2D(Main.Graphics.GraphicsDevice, resolution.X, resolution.Y);
+            Main.LightsRenderTarget = new RenderTarget2D(Main.Graphics.GraphicsDevice, resolution.X, resolution.Y);
+            Main.Graphics.GraphicsDevice.Clear(Color.Black);
+            Main.Graphics.PreferredBackBufferWidth = resolution.X;
+            Main.Graphics.PreferredBackBufferHeight = resolution.Y;
+
+            Main.Camera.Viewport = new Viewport(resolution.X / 2, resolution.Y / 2, resolution.X, resolution.Y);
+        }
+        public void NextResolution()
+        {
+            DisplayModeCollection collection = GraphicsAdapter.DefaultAdapter.SupportedDisplayModes;
+            int index = collection.ToList().FindIndex(x => Resolution.X == x.Width && Resolution.Y == x.Height) + 1;
+            if (index >= collection.Count())
+                index = 0;
+
+            DisplayMode resolution = collection.ToArray()[index];
+            Resolution = new Point(resolution.Width, resolution.Height);
+
+            SetResolution();
+            Main.Graphics.ApplyChanges();
         }
         public void SetWindowMode()
         {
@@ -53,14 +93,17 @@ namespace AstrobotanyLibrary.Classes.Objects
             {
                 default:
                     Main.Graphics.IsFullScreen = false;
+                    Main.Self.Window.IsBorderless = false;
                     Main.Graphics.HardwareModeSwitch = true;
                     break;
                 case WindowMode.Borderless:
                     Main.Graphics.IsFullScreen = true;
+                    Main.Self.Window.IsBorderless = true;
                     Main.Graphics.HardwareModeSwitch = false;
                     break;
                 case WindowMode.Fullscreen:
                     Main.Graphics.IsFullScreen = true;
+                    Main.Self.Window.IsBorderless = true;
                     Main.Graphics.HardwareModeSwitch = true;
                     break;
             }
@@ -78,10 +121,18 @@ namespace AstrobotanyLibrary.Classes.Objects
         }
         private void Graphics_PreparingDeviceSettings(object sender, PreparingDeviceSettingsEventArgs e)
         {
-            Main.Graphics.PreferMultiSampling = true;
-            e.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount = MultiSampleCount;
+            Main.Graphics.GraphicsProfile = GraphicsProfile.Reach;
+            Main.Graphics.PreferMultiSampling = false;
+            e.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount = 0;
         }
-
+        private void OnFocus()
+        {
+            Main.Self.IsMouseVisible = false;
+        }
+        private void OnLoseFocus()
+        {
+            Main.Self.IsMouseVisible = true;
+        }
         public bool LoadControls()
         {
             try
@@ -127,7 +178,11 @@ namespace AstrobotanyLibrary.Classes.Objects
         public bool LoadSettings()
         {
             if (!File.Exists($@"{SavePath}/settings.xml"))
+            {
                 SaveSettings();
+                ApplySettings();
+                return true;
+            } 
 
             XmlSerializer serializer = new XmlSerializer(typeof(Settings));
             using (XmlReader reader = XmlReader.Create($@"{SavePath}/settings.xml"))

@@ -12,7 +12,7 @@ namespace AstrobotanyLibrary.Classes.Objects
             Sprite = new Rectangle(0, 0, 32, 32);
             Position = Vector2.Zero;
         }
-        protected GameObject(int x, int y)
+        protected GameObject(float x, float y)
         {
             Solid = true;
             Hitbox = new Rectangle(0, 0, 32, 32);
@@ -27,41 +27,10 @@ namespace AstrobotanyLibrary.Classes.Objects
             Position = copy.Position;
         }
 
-        protected Rectangle sprite_;
-        protected Rectangle hitbox_;
-
         public string Name { get; protected set; }
-        public bool Solid { get; protected set; }
-        public Rectangle Hitbox
-        {
-            get
-            {
-                return new Rectangle(
-                    (int)Position.X + hitbox_.X,
-                    (int)Position.Y + hitbox_.Y,
-                    hitbox_.Width,
-                    hitbox_.Height);
-            }
-            protected set
-            {
-                hitbox_ = value;
-            }
-        }
-        public Rectangle Sprite
-        {
-            get
-            {
-                return new Rectangle(
-                    (int)Position.X + sprite_.X,
-                    (int)Position.Y + sprite_.Y,
-                    sprite_.Width,
-                    sprite_.Height);
-            }
-            protected set
-            {
-                sprite_ = value;
-            }
-        }
+        public bool Solid { get; set; }
+        public Rectangle Hitbox { get; set; }
+        public Rectangle Sprite { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Centre {
             get

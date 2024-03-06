@@ -7,12 +7,12 @@
 	#define PS_SHADERMODEL ps_4_0_level_9_1
 #endif
 
-Texture2D SpriteTexture;
-Texture2D DistortionTexture;
-float1 Time;
-float1 Magnitude;
-float1 Scale;
-float2 Offset;
+uniform Texture2D SpriteTexture;
+uniform Texture2D DistortionTexture;
+uniform float1 Time;
+uniform float1 Magnitude;
+uniform float1 Scale;
+uniform float2 Offset;
 
 sampler2D SpriteTextureSampler = sampler_state
 {

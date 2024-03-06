@@ -18,15 +18,8 @@ namespace AstrobotanyLibrary.Classes.Utility
     }
     public static class MathAdditions
     {
-        public static float BezierCurve(float time)
-        {
-            return time * time * (3f - 2f * time);
-        }
-        public static float ParametricCurve(float time)
-        {
-            float timeSqrd = time * time;
-            return timeSqrd / (2f * (timeSqrd - time) + 1f);
-        }
+        public const float SQUAREROOT2 = 1.41421356237f;
+
         public static bool PointIntersects(Point point, Rectangle rectangle)
         {
             return (point.X >= rectangle.Left) && (point.X <= rectangle.Right) &&
@@ -119,10 +112,6 @@ namespace AstrobotanyLibrary.Classes.Utility
             return new Vector2(
                 (input.X - input.Y) * (width / 2),
                 (input.X + input.Y) * (height / 2));
-        }
-        public static float LayerDepth(Point position, int maxDepth)
-        {
-            return (float)(position.X + position.Y) / maxDepth;
         }
 
         public static Vector2 Reflect(Vector2 direction, Vector2 normal)

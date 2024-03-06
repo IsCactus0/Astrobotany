@@ -10,14 +10,10 @@ namespace AstrobotanyLibrary.Classes.Objects.Pathfinding
             Parent = null;
             Neighbours = new List<Point>();
 
-            if (x > 0)
-                Neighbours.Add(Position + new Point(-1, 0));
-            if (x < width - 1)
-                Neighbours.Add(Position + new Point(1, 0));
-            if (y > 0)
-                Neighbours.Add(Position + new Point(0, -1));
-            if (y < height - 1)
-                Neighbours.Add(Position + new Point(0, 1));
+            for (int ny = -1; ny <= 1; ny++)
+                for (int nx = -1; nx <= 1; nx++)
+                    if ((x + nx >= 0 && x + nx < width) && (y + ny >= 0 && y + ny < height))
+                        Neighbours.Add(Position + new Point(nx, ny));
 
             Solid = solid;
             gCost = 0;
@@ -32,14 +28,14 @@ namespace AstrobotanyLibrary.Classes.Objects.Pathfinding
         /// The value of the node based on it's distance and heuristic.
         /// With lower values being better than higher values.
         /// </summary>
-        public int fCost { get { return gCost + hCost; } }
+        public float fCost { get { return gCost + hCost; } }
         /// <summary>
         /// Distance from starting node.
         /// </summary>
-        public int gCost { get; set; }
+        public float gCost { get; set; }
         /// <summary>
         /// Distance from end node.
         /// </summary>
-        public int hCost { get; set; }
+        public float hCost { get; set; }
     }
 }

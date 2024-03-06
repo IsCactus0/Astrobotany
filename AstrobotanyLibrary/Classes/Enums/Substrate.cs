@@ -10,6 +10,6 @@
         Clay,
         Gravel,
         Vermiculite,
-        Perlite,
+        Perlite
     }
 }

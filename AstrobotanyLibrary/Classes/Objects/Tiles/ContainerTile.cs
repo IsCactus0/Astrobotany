@@ -1,4 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Objects.Items;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Objects.Tiles
 {
@@ -27,6 +28,18 @@ namespace AstrobotanyLibrary.Classes.Objects.Tiles
 
         public Inventory Inventory;
 
+        public override void Drop(ItemStack stack)
+        {
+            Inventory.AddItem(stack);
+        }
+        public override void Hover(float delta)
+        {
+            base.Hover(delta);
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+        }
         public override void Reset()
         {
             Inventory.Clear();

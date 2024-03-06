@@ -1,5 +1,4 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
-using Microsoft.Xna.Framework;
 
 namespace AstrobotanyLibrary.Classes.Objects
 {
@@ -11,8 +10,8 @@ namespace AstrobotanyLibrary.Classes.Objects
             Genus = "Unknown";
             Species = "Unknown";
             Description = "";
-            Width = 16;
-            Height = 16;
+            Width = 1;
+            Height = 1;
             Age = 0f;
             MaxAge = 1f;
             MaxGrowthStage = 1;
@@ -25,8 +24,8 @@ namespace AstrobotanyLibrary.Classes.Objects
             Genus = "Unknown";
             Species = "Unknown";
             Description = "";
-            Width = 16;
-            Height = 16;
+            Width = 1;
+            Height = 1;
             Age = 0f;
             MaxAge = 1f;
             MaxGrowthStage = 1;
@@ -39,8 +38,8 @@ namespace AstrobotanyLibrary.Classes.Objects
             Genus = genus;
             Species = species;
             Description = "";
-            Width = 16;
-            Height = 16;
+            Width = 1;
+            Height = 1;
             Age = 0f;
             MaxAge = 1f;
             MaxGrowthStage = 1;
@@ -53,8 +52,8 @@ namespace AstrobotanyLibrary.Classes.Objects
             Genus = genus;
             Species = species;
             Description = description;
-            Width = 16;
-            Height = 16;
+            Width = 1;
+            Height = 1;
             Age = 0f;
             MaxAge = 1f;
             MaxGrowthStage = 1;
@@ -124,35 +123,30 @@ namespace AstrobotanyLibrary.Classes.Objects
         public string Description { get; protected set; }
         public int Width { get; protected set; }
         public int Height { get; protected set; }
-        public Rectangle Rectangle
-        {
-            get { return new Rectangle(0, 0, Width, Height); }
-        }
         public float Age { get; protected set; }
         public float MaxAge { get; protected set; }
         public int GrowthStage
         {
-            get { return (int)Math.Clamp(((Age / MaxAge) * MaxGrowthStage), 0, MaxGrowthStage); }
+            get { return (int)(Age / MaxAge * MaxGrowthStage); }
         }
         public int MaxGrowthStage { get; protected set; }
         public float PreferredLightIntensity { get; protected set; }
         public float PreferredTemperature { get; protected set; }
         public float PreferredHumidity { get; protected set; }
+        public float PreferredSaturation { get; protected set; }
         public Dictionary<Substrate, float> SubstratePreferences { get; protected set; }
 
-        public virtual float CalculateGrowthRate(float lightIntensity, float temperature, float humidity, float waterSaturation, Substrate substrate, float soilNutrition)
+        public virtual float CalculateGrowthRate(float lightIntensity, float temperature, float humidity, float saturation, Substrate substrate, float soilNutrition)
         {
             float growthRate = lightIntensity - PreferredLightIntensity;
 
-            growthRate += Math.Min(-(float)Math.Pow(temperature, 2), 0f);
-            growthRate += Math.Min(-(float)Math.Pow(temperature, 2), 0f);
+            growthRate += Math.Min(-(temperature * temperature), 0f);
 
             return growthRate;
         }
         public virtual void Update(float delta, Substrate substrate)
         {
-            // float growthRate = 1;
-            Age += delta;
+            Age = Math.Min(Age + delta, MaxAge);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
 using AstrobotanyLibrary.Classes.Objects;
-using AstrobotanyLibrary.Classes.Objects.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,8 +7,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 {
     public class InputManager : GameComponent
     {
-        public InputManager(Game game): base(game)
-        {
+        public InputManager(Game game): base(game) {
             KeyboardControls = new Dictionary<Enums.Action, List<Keys>>()
             {
                 { Enums.Action.MoveUp, new List<Keys>()     { Keys.Up, Keys.W } },
@@ -64,11 +62,10 @@ namespace AstrobotanyLibrary.Classes.Managers
         public GamePadState LastGamePadState { get; private set; }
         public Vector2 SelectionStart { get; private set; }
         public Vector2 SelectionEnd { get; private set; }
-        private Vector2? dragStartPosition { get; set; }
+        private Vector2? DragStartPosition { get; set; }
 
-        public override void Update(GameTime gameTime)
-        {
-            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
+        public override void Update(GameTime gameTime) {
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             LastKeyboardState = KeyboardState;
             KeyboardState = Keyboard.GetState();
@@ -94,21 +91,22 @@ namespace AstrobotanyLibrary.Classes.Managers
             else if (InputPressed(Enums.Action.MoveRight))
                 Main.Camera.Offset += Vector2.UnitX * delta * 100f;
 
-            if (dragStartPosition is not null)
-            {
-                Main.Camera.Offset -= MouseWorldPosition(Main.Camera) - dragStartPosition.Value;
-            
-                if (MouseFirstReleased(MouseButton.Middle))
-                    dragStartPosition = null;
+            if (DragStartPosition is not null) {
+                Main.Camera.Offset -= MouseWorldPosition(Main.Camera) - DragStartPosition.Value;
+                Main.InterfaceManager.Cursor.State = CursorState.Grab;
+                if (MouseFirstReleased(MouseButton.Middle)) {
+                    DragStartPosition = null;
+                    Main.InterfaceManager.Cursor.State = CursorState.Arrow;
+                }
             }
-            else if (MouseFirstPressed(MouseButton.Middle))
-                dragStartPosition = MouseWorldPosition(Main.Camera);
+            else if (MouseFirstPressed(MouseButton.Middle)) {
+                DragStartPosition = MouseWorldPosition(Main.Camera);
+            }
 
             base.Update(gameTime);
         }
 
-        public MouseButton GetMouseButton()
-        {
+        public MouseButton GetMouseButton() {
             if (MouseState.LeftButton == ButtonState.Pressed)
                 return MouseButton.Left;
             else if (MouseState.RightButton == ButtonState.Pressed)
@@ -118,123 +116,123 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             return MouseButton.None;
         }
-        public bool MouseAnyPressed()
-        {
+        public MouseButton GetReleasedMouseButton() {
+            if (MouseState.LeftButton == ButtonState.Released && MouseState.LeftButton == ButtonState.Pressed)
+                return MouseButton.Left;
+            else if (MouseState.RightButton == ButtonState.Released && MouseState.RightButton == ButtonState.Pressed)
+                return MouseButton.Right;
+            else if (MouseState.MiddleButton == ButtonState.Released && MouseState.MiddleButton == ButtonState.Pressed)
+                return MouseButton.Middle;
+
+            return MouseButton.None;
+        }
+        public MouseButton GetFirstPressedMouseButton() {
+            if (LastMouseState.LeftButton == ButtonState.Released && MouseState.LeftButton == ButtonState.Pressed)
+                return MouseButton.Left;
+            else if (LastMouseState.RightButton == ButtonState.Released && MouseState.RightButton == ButtonState.Pressed)
+                return MouseButton.Right;
+            else if (LastMouseState.MiddleButton == ButtonState.Released && MouseState.MiddleButton == ButtonState.Pressed)
+                return MouseButton.Middle;
+
+            return MouseButton.None;
+        }
+        public bool MouseAnyPressed() {
             return
                 MouseState.LeftButton == ButtonState.Pressed ||
                 MouseState.RightButton == ButtonState.Pressed ||
                 MouseState.MiddleButton == ButtonState.Pressed;
         }
-        public bool MousePressed(MouseButton button = MouseButton.Left)
-        {
-            switch (button)
-            {
-                default:
+        public bool MouseAnyFirstPressed() {
+            return (LastMouseState.LeftButton == ButtonState.Released && MouseState.LeftButton == ButtonState.Pressed) ||
+                   (LastMouseState.RightButton == ButtonState.Released && MouseState.RightButton == ButtonState.Pressed) ||
+                   (LastMouseState.MiddleButton == ButtonState.Released && MouseState.MiddleButton == ButtonState.Pressed);
+        }
+        public bool MousePressed(MouseButton button = MouseButton.Left) {
+            switch (button) {
+                case MouseButton.Left:
                     return MouseState.LeftButton == ButtonState.Pressed;
                 case MouseButton.Right:
                     return MouseState.RightButton == ButtonState.Pressed;
                 case MouseButton.Middle:
                     return MouseState.MiddleButton == ButtonState.Pressed;
+                default: return false;
             }
         }
-        public bool MouseFirstPressed(MouseButton button = MouseButton.Left)
-        {
-            switch (button)
-            {
-                default:
-                    return LastMouseState.LeftButton == ButtonState.Released &&
-                        MouseState.LeftButton == ButtonState.Pressed;
+        
+        public bool MouseFirstPressed(MouseButton button = MouseButton.Left) {
+            switch (button) {
+                case MouseButton.Left:
+                    return LastMouseState.LeftButton == ButtonState.Released && MouseState.LeftButton == ButtonState.Pressed;
                 case MouseButton.Right:
-                    return LastMouseState.RightButton == ButtonState.Released &&
-                        MouseState.RightButton == ButtonState.Pressed;
+                    return LastMouseState.RightButton == ButtonState.Released && MouseState.RightButton == ButtonState.Pressed;
                 case MouseButton.Middle:
-                    return LastMouseState.MiddleButton == ButtonState.Released &&
-                        MouseState.MiddleButton == ButtonState.Pressed;
+                    return LastMouseState.MiddleButton == ButtonState.Released && MouseState.MiddleButton == ButtonState.Pressed;
+                default: return false;
             }
         }
-        public bool MouseReleased(MouseButton button = MouseButton.Left)
-        {
-            switch (button)
-            {
-                default:
+        public bool MouseReleased(MouseButton button = MouseButton.Left) {
+            switch (button) {
+                case MouseButton.Left:
                     return MouseState.LeftButton == ButtonState.Released;
                 case MouseButton.Right:
                     return MouseState.RightButton == ButtonState.Released;
                 case MouseButton.Middle:
                     return MouseState.MiddleButton == ButtonState.Released;
+                default: return false;
             }
         }
-        public bool MouseFirstReleased(MouseButton button = MouseButton.Left)
-        {
-            switch (button)
-            {
-                default:
-                    return LastMouseState.LeftButton == ButtonState.Pressed &&
-                        MouseState.LeftButton == ButtonState.Released;
+        public bool MouseFirstReleased(MouseButton button = MouseButton.Left) {
+            switch (button) {
+                case MouseButton.Left:
+                    return LastMouseState.LeftButton == ButtonState.Pressed && MouseState.LeftButton == ButtonState.Released;
                 case MouseButton.Right:
-                    return LastMouseState.RightButton == ButtonState.Pressed &&
-                        MouseState.RightButton == ButtonState.Released;
+                    return LastMouseState.RightButton == ButtonState.Pressed && MouseState.RightButton == ButtonState.Released;
                 case MouseButton.Middle:
-                    return LastMouseState.MiddleButton == ButtonState.Pressed &&
-                        MouseState.MiddleButton == ButtonState.Released;
+                    return LastMouseState.MiddleButton == ButtonState.Pressed && MouseState.MiddleButton == ButtonState.Released;
+                default: return false;
             }
         }
-        public float MouseScrollValue()
-        {
+        public float MouseScrollValue() {
             return LastMouseState.ScrollWheelValue - MouseState.ScrollWheelValue;
         }
 
-        public bool KeyPressed(Keys key)
-        {
+        public bool KeyPressed(Keys key) {
             return KeyboardState.IsKeyDown(key);
         }
-        public bool KeyFirstPressed(Keys key)
-        {
-            return KeyboardState.IsKeyDown(key) &&
-                LastKeyboardState.IsKeyUp(key);
+        public bool KeyFirstPressed(Keys key) {
+            return KeyboardState.IsKeyDown(key) && LastKeyboardState.IsKeyUp(key);
         }
-        public bool KeyReleased(Keys key)
-        {
+        public bool KeyReleased(Keys key) {
             return KeyboardState.IsKeyUp(key);
         }
-        public bool KeyFirstReleased(Keys key)
-        {
-            return KeyboardState.IsKeyUp(key) &&
-                LastKeyboardState.IsKeyDown(key);
+        public bool KeyFirstReleased(Keys key) {
+            return KeyboardState.IsKeyUp(key) && LastKeyboardState.IsKeyDown(key);
         }
-        public bool AnyKeyPressed()
-        {
+        public bool AnyKeyPressed() {
             return KeyboardState.GetPressedKeyCount() > 0;
         }
 
-        public bool ButtonPressed(Buttons button)
-        {
+        public bool ButtonPressed(Buttons button) {
             return GamePadState.IsButtonDown(button);
         }
-        public bool ButtonFirstPressed(Buttons button)
-        {
-            return GamePadState.IsButtonDown(button) &&
-                LastGamePadState.IsButtonUp(button);
+        public bool ButtonFirstPressed(Buttons button) {
+            return GamePadState.IsButtonDown(button) && LastGamePadState.IsButtonUp(button);
         }
-        public bool ButtonReleased(Buttons button)
-        {
+        public bool ButtonReleased(Buttons button) {
             return GamePadState.IsButtonUp(button);
         }
-        public bool ButtonFirstReleased(Buttons button)
-        {
-            return GamePadState.IsButtonUp(button) &&
-                LastGamePadState.IsButtonDown(button);
+        public bool ButtonFirstReleased(Buttons button) {
+            return GamePadState.IsButtonUp(button) && LastGamePadState.IsButtonDown(button);
         }
-        public bool AnyButtonPressed()
-        {
+        public bool AnyButtonPressed() {
             foreach (Buttons button in Enum.GetValues(typeof(Buttons)))
                 if (ButtonPressed(button))
                     return true;
+
             return false;
         }
 
-        public bool InputPressed(Enums.Action action)
-        {
+        public bool InputPressed(Enums.Action action) {
             foreach (Keys key in KeyboardControls[action])
                 if (KeyPressed(key))
                     return true;
@@ -245,8 +243,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             return false;
         }
-        public bool InputFirstPressed(Enums.Action action)
-        {
+        public bool InputFirstPressed(Enums.Action action) {
             foreach (Keys key in KeyboardControls[action])
                 if (KeyFirstPressed(key))
                     return true;
@@ -257,8 +254,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             return false;
         }
-        public bool InputReleased(Enums.Action action)
-        {
+        public bool InputReleased(Enums.Action action) {
             foreach (Keys key in KeyboardControls[action])
                 if (KeyReleased(key))
                     return true;
@@ -269,8 +265,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             return false;
         }
-        public bool InputFirstReleased(Enums.Action action)
-        {
+        public bool InputFirstReleased(Enums.Action action) {
             foreach (Keys key in KeyboardControls[action])
                 if (KeyFirstReleased(key))
                     return true;
@@ -282,24 +277,19 @@ namespace AstrobotanyLibrary.Classes.Managers
             return false;
         }
 
-        public Vector2 MouseWorldPosition(Camera camera)
-        {
+        public Vector2 MouseWorldPosition(Camera camera) {
             return Vector2.Transform(MouseState.Position.ToVector2(), camera.InvertedTransform);
         }
-        public Point MouseWorldPositionP(Camera camera)
-        {
+        public Point MouseWorldPositionP(Camera camera) {
             return MouseWorldPosition(camera).ToPoint();
         }
-        public Vector2 MouseScreenPosition()
-        {
+        public Vector2 MouseScreenPosition() {
             return MouseScreenPositionP().ToVector2();
         }
-        public Point MouseScreenPositionP()
-        {
+        public Point MouseScreenPositionP() {
             return MouseState.Position;
         }
-        public Rectangle SelectionBounds()
-        {
+        public Rectangle SelectionBounds() {
             int x, y;
             if (SelectionStart.X < SelectionEnd.X)
                 x = (int)SelectionStart.X;
@@ -309,8 +299,7 @@ namespace AstrobotanyLibrary.Classes.Managers
                 y = (int)SelectionStart.Y;
             else y = (int)SelectionEnd.Y;
 
-            return new Rectangle(
-                x, y,
+            return new Rectangle(x, y,
                 (int)Math.Abs(SelectionStart.X - SelectionEnd.X),
                 (int)Math.Abs(SelectionStart.Y - SelectionEnd.Y));
         }

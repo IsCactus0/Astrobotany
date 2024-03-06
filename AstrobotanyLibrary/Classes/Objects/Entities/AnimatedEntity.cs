@@ -1,18 +1,13 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace AstrobotanyLibrary.Classes.Objects.Entities
 {
-    public abstract class AnimatedEntity : Entity
-    {
-        protected AnimatedEntity()
-            : base()
-        {
+    public abstract class AnimatedEntity : Entity {
+        protected AnimatedEntity() : base() {
             CurrentAnimation = "";
             Animations = new Dictionary<string, Animation>();
         }
-        protected AnimatedEntity(AnimatedEntity copy)
-        {
+        protected AnimatedEntity(AnimatedEntity copy) : base(copy) {
             CurrentAnimation = copy.CurrentAnimation;
             Animations = copy.Animations;
         }
@@ -20,22 +15,21 @@ namespace AstrobotanyLibrary.Classes.Objects.Entities
         public string CurrentAnimation { get; set; }
         public Dictionary<string, Animation> Animations { get; set; }
 
-        public override void Update(float delta)
-        {
+        public void SetAnimation(string newAnimation) {
+            if (CurrentAnimation == newAnimation)
+                return;
+
+            CurrentAnimation = newAnimation;
+            Animations[CurrentAnimation].CurrentIndex = Animations[CurrentAnimation].StartIndex;
+        }
+        public override void Update(float delta) {
             if (!string.IsNullOrEmpty(CurrentAnimation))
                 Animations[CurrentAnimation].Update(delta);
 
             base.Update(delta);
         }
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(
-                Animations[CurrentAnimation].Texture,
-                new Rectangle(
-                    (int)Position.X,
-                    (int)Position.Y,
-                    32, 32),
-                Color.White);
+        public override void Draw(SpriteBatch spriteBatch) {
+            base.Draw(spriteBatch);
         }
         public override string ToString()
         {

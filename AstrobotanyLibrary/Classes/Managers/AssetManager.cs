@@ -20,7 +20,7 @@ namespace AstrobotanyLibrary.Classes.Managers
 
             LoadContent();
         }
-        
+
         private ContentManager Content { get; set; }
         private GraphicsDevice Graphics { get; set; }
         public string AssetPath { get; private set; }
@@ -33,9 +33,10 @@ namespace AstrobotanyLibrary.Classes.Managers
         {
             Textures.Add("empty", Drawing.Square(Graphics, 1, Color.Magenta));
             Textures.Add("simple", Drawing.Square(Graphics, 1, Color.White));
-            Textures.Add("circle", Drawing.Circle(Graphics, 8, Color.White));
-            Textures.Add("blur", Drawing.Circle(Graphics, 3, Color.White, FadeType.InverseSquare));
-            Textures.Add("blur2", Drawing.Circle(Graphics, 128, Color.White, FadeType.Linear));
+            Textures.Add("circle", Drawing.Circle(Graphics, 32, Color.White));
+            Textures.Add("blur", Drawing.Circle(Graphics, 256, Color.White, FadeType.InverseSquare));
+            Textures.Add("noise", Drawing.NoiseCircle(Graphics, 32, 0.1f, Color.White, FadeType.Edge));
+            Textures.Add("light", Drawing.Circle(Graphics, 128, Color.Black, FadeType.InverseSquare));
 
             LoadFontFamily("MonomaniacOne");
             LoadFontFamily("Montserrat");
@@ -165,6 +166,10 @@ namespace AstrobotanyLibrary.Classes.Managers
                 LoadFontFamily(name);
 
             return Fonts[name];
+        }
+        public static string FileName(string name)
+        {
+            return name.ToLower().Replace(' ', '_');
         }
     }
 }

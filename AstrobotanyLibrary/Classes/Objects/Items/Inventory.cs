@@ -1,4 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
+using Microsoft.Xna.Framework;
 
 namespace AstrobotanyLibrary.Classes.Objects.Items
 {
@@ -32,35 +33,38 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
         {
             Array.Clear(Items, 0, Items.Length);
         }
+        public bool AddItemToSlot(ItemStack itemStack, int x, int y)
+        {
+            // Check if slot is empty.
+            if (Items[x, y] is null)
+            {
+                Items[x, y] = itemStack;
+                return true;
+            }
+
+            // Check if items are the same.
+            if (Items[x, y].Item == itemStack.Item)
+                return false;
+
+            // Merge stacks together if enough space is left.
+            if (Items[x, y].Count + itemStack.Count <= Items[x, y].Item.MaxStack)
+            {
+                Items[x, y].Count += itemStack.Count;
+                return true;
+            }
+
+            // Add remaining items to original item then make new stack.
+            int remaining = Items[x, y].Item.MaxStack - Items[x, y].Count;
+            itemStack.Count -= remaining;
+            Items[x, y].Count = Items[x, y].Item.MaxStack;
+            return true;
+        }
         public bool AddItem(ItemStack itemStack)
         {
             for (int y = 0; y < Items.GetLength(1); y++)
                 for (int x = 0; x < Items.GetLength(0); x++)
-                {
-                    // Check if slot is empty.
-                    if (Items[x, y] is null)
-                    {
-                        Items[x, y] = itemStack;
+                    if (AddItemToSlot(itemStack, x, y))
                         return true;
-                    }
-
-                    // Check if items are the same.
-                    if (Items[x, y].Item.Name != itemStack.Item.Name)
-                        continue;
-
-                    // Merge stacks together if enough space is left.
-                    if (Items[x, y].Count + itemStack.Count <= Items[x, y].MaxStack)
-                    {
-                        Items[x, y].Count += itemStack.Count;
-                        return true;
-                    }
-
-                    // Add remaining items to original item then make new stack.
-                    int remaining = Items[x, y].MaxStack - Items[x, y].Count;
-                    itemStack.Count -= remaining;
-                    Items[x, y].Count = Items[x, y].MaxStack;
-
-                }
 
             return false;
         }
@@ -69,7 +73,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
             switch (sortMode)
             {
                 case SortMode.Count:
-                    List<ItemStack> items = new List<ItemStack>();
+                    List<ItemStack> items = new();
 
                     for (int y = 0; y < Items.GetLength(1); y++)
                         for (int x = 0; x < Items.GetLength(0); x++)
@@ -80,7 +84,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
                         return false;
 
                     Array.Clear(Items);
-                    items.OrderBy(x => x.Count).ToList();
+                    items = items.OrderBy(x => x.Count).ToList();
                     foreach (ItemStack item in items)
                         AddItem(item);
 

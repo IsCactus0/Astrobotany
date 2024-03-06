@@ -8,14 +8,14 @@ namespace AstrobotanyLibrary.Classes.Objects
     {
         public Camera()
         {
-            Scale = 6f;
+            Scale = 5f;
             Rotation = 0f;
             PhysicsDistance = 1000f;
             Position = Vector2.Zero;
             Offset = Vector2.Zero;
             Viewport = new Viewport();
             SamplerState = SamplerState.PointClamp;
-            ScreenShake = 0f;
+            ScreenShake = 1f;
         }
 
         public float Scale { get; set; }
@@ -47,22 +47,34 @@ namespace AstrobotanyLibrary.Classes.Objects
         {
             get
             {
+                Vector2 position = Vector2.Transform(
+                    new Vector2(
+                        Viewport.X - (Viewport.Width / 2f),
+                        Viewport.Y - (Viewport.Height / 2f)),
+                    InvertedTransform);
+
                 return new Rectangle(
-                    (int)(Position.X - Viewport.Width / 2f * (1f / Scale)),
-                    (int)(Position.Y - Viewport.Height / 2f * (1f / Scale)),
-                    (int)(Viewport.Width * (1f / Scale)),
-                    (int)(Viewport.Height * (1f / Scale)));
+                    (int)MathF.Floor(position.X) - 1,
+                    (int)MathF.Floor(position.Y) - 1,
+                    (int)MathF.Ceiling(Main.Settings.Resolution.X / Scale) + 2,
+                    (int)MathF.Ceiling(Main.Settings.Resolution.Y / Scale) + 2);
             }
         }
         public Rectangle PhysicsBoundingBox
         {
             get
             {
+                Vector2 position = Vector2.Transform(
+                    new Vector2(
+                        Viewport.X - (Viewport.Width / 2f),
+                        Viewport.Y - (Viewport.Height / 2f)),
+                    InvertedTransform);
+                
                 return new Rectangle(
-                    (int)(Position.X - Viewport.Width / 2f * (1f / Scale) - PhysicsDistance),
-                    (int)(Position.Y - Viewport.Height / 2f * (1f / Scale) - PhysicsDistance),
-                    (int)((Viewport.Width * (1f / Scale)) + PhysicsDistance * 2f),
-                    (int)((Viewport.Height * (1f / Scale)) + PhysicsDistance * 2f));
+                    (int)MathF.Floor(position.X - PhysicsDistance) - 1,
+                    (int)MathF.Floor(position.Y - PhysicsDistance) - 1,
+                    (int)MathF.Ceiling(Main.Settings.Resolution.X / Scale + PhysicsDistance * 2f) + 2,
+                    (int)MathF.Ceiling(Main.Settings.Resolution.Y / Scale + PhysicsDistance * 2f) + 2);
             }
         }
         public float ScreenShake { get; set; }
@@ -81,6 +93,10 @@ namespace AstrobotanyLibrary.Classes.Objects
             }
 
             Position = Vector2.Lerp(Position, Offset + target + shake, delta * strength);
+        }
+        public void Apply()
+        {
+            Position += Offset;
         }
         public bool WithinBounds(Vector2 position)
         {

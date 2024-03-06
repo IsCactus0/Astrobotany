@@ -129,7 +129,10 @@ namespace AstrobotanyLibrary.Classes.Objects
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            Drawing.DrawRectangle(spriteBatch, Bounds, Color.CornflowerBlue);
+            Drawing.DrawRectangle(spriteBatch,
+                Bounds.Location.ToVector2(),
+                Bounds.Size.ToVector2(),
+                Color.CornflowerBlue);
 
             if (SubTrees is not null)
                 for (int i = 0; i < 4; i++)

@@ -29,6 +29,19 @@ namespace AstrobotanyLibrary.Classes.Objects
             Mass = copy.Mass;
             Friction = copy.Friction;
         }
+        protected PhysicsObject(float x, float y)
+            : base(x, y)
+        {
+            Velocity = Vector2.Zero;
+            Acceleration = Vector2.Zero;
+            Force = Vector2.Zero;
+            Rotation = 0f;
+            RotationalVelocity = 0f;
+            RotationalAcceloration = 0f;
+            RotationalForce = 0f;
+            Mass = 1f;
+            Friction = 0.5f;
+        }
 
         public Vector2 Velocity { get; set; }
         public Vector2 Acceleration { get; set; }

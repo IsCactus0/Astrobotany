@@ -2,27 +2,9 @@
 {
     public static class Items
     {
-        public static Item Capacitor = new Item()
-        {
-            Name = "Capacitor",
-            Description =
-                "A capacitor is a device that" +
-                "stores electrical energy in an" +
-                "electric field by virtue of" +
-                "accumulating electric charges" +
-                "on two close surfaces insulated" +
-                "from each other.",
-            Category = Enums.ItemCategory.Component,
-            Value = 12
-        };
-
-        public static Item Battery = new Item()
-        {
-            Name = "Battery",
-            Description =
-                "A simple battery.",
-            Category = Enums.ItemCategory.Component,
-            Value = 6
-        };
+        public static readonly Item Capacitor = new ("Capacitor", "Stores an electrical charge.", 4, 8, Enums.ItemCategory.Component);
+        public static readonly Item CircuitBoard = new ("Circuit Board", "A simple battery.", 2, 12, Enums.ItemCategory.Component);
+        public static readonly Item Valve = new ("Valve", "Red valve.", 8, 12, Enums.ItemCategory.Component);
+        public static readonly SeedItem SunflowerSeeds = new("Sunflower Seeds", "Makes a good snack.", 3, 12, Enums.ItemCategory.Seed);
     }
 }

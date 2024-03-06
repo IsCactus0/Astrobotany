@@ -1,4 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Enums;
+using AstrobotanyLibrary.Classes.Managers;
 
 namespace AstrobotanyLibrary.Classes.Objects.Items
 {
@@ -10,6 +11,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
             Name = "";
             Description = "";
             Value = 0;
+            MaxStack = 1;
             Category = ItemCategory.Misc;
         }
         public Item(string name)
@@ -17,6 +19,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
             Name = name;
             Description = "";
             Value = 0;
+            MaxStack = 1;
             Category = ItemCategory.Misc;
         }
         public Item(string name, string description)
@@ -24,6 +27,7 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
             Name = name;
             Description = description;
             Value = 0;
+            MaxStack = 1;
             Category = ItemCategory.Misc;
         }
         public Item(string name, string description, int value)
@@ -31,19 +35,35 @@ namespace AstrobotanyLibrary.Classes.Objects.Items
             Name = name;
             Description = description;
             Value = value;
+            MaxStack = 1;
             Category = ItemCategory.Misc;
         }
-        public Item(string name, string description, int value, ItemCategory category)
+        public Item(string name, string description, int value, int maxStack)
         {
             Name = name;
             Description = description;
             Value = value;
+            MaxStack = maxStack;
+            Category = ItemCategory.Misc;
+        }
+        public Item(string name, string description, int value, int maxStack, ItemCategory category)
+        {
+            Name = name;
+            Description = description;
+            Value = value;
+            MaxStack = maxStack;
             Category = category;
         }
 
         public string Name { get; set; }
         public string Description { get; set; }
         public int Value { get; set; }
+        public int MaxStack { get; set; }
         public ItemCategory Category { get; set; }
+
+        public override string ToString()
+        {
+            return AssetManager.FileName(Name);
+        }
     }
 }

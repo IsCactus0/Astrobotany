@@ -1,6 +1,5 @@
 ﻿using AstrobotanyLibrary.Classes.Objects;
 using AstrobotanyLibrary.Classes.Objects.Particles;
-using AstrobotanyLibrary.Classes.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,7 +22,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         public override void Update(GameTime gameTime)
         {
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds * Main.GameSpeed;
-            if (Particles.Count > 0 || delta <= 0f)
+            if (Particles.Count == 0 || delta <= 0f)
                 return;
 
             QuadTree = new QuadTree(Main.Camera.BoundingBox, 32);
@@ -33,7 +32,7 @@ namespace AstrobotanyLibrary.Classes.Managers
             for (int i = Particles.Count - 1; i >= 0; i--)
             {
                 Particle particle = Particles[i];
-                if (!MathAdditions.VectorIntersects(particle.Position, Main.Camera.BoundingBox)) {
+                if (!Main.Camera.WithinBounds(particle.Position)) {
                     particle.Destroy();
                     continue;
                 }
@@ -45,7 +44,7 @@ namespace AstrobotanyLibrary.Classes.Managers
         public override void Draw(GameTime gameTime)
         {
             foreach (Particle particle in Particles)
-                if (MathAdditions.VectorIntersects(particle.Position, Main.Camera.BoundingBox))
+                if (Main.Camera.WithinBounds(particle.Position))
                     particle.Draw(Main.SpriteBatch);
 
             base.Draw(gameTime);
